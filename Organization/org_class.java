@@ -57,7 +57,7 @@ public abstract class org_class {
         return orgID;
     }
 
-    public String getName() {
+    public String getOrgName() {
         return OrgName;
     }
 
@@ -65,8 +65,8 @@ public abstract class org_class {
         return workQueue;
     }
 
-    public void setName(String Name) {
-        this.OrgName = Name;
+    public void setOrgName(String OrgName) {
+        this.OrgName = this.OrgName;
     }
 
     public void setWorkQueue(WorkQueue_class workQueue) {
@@ -77,6 +77,8 @@ public abstract class org_class {
     public String toString() {
         return OrgName;
     }
+
+    
     
      
 }

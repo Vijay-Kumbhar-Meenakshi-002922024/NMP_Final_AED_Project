@@ -25,7 +25,7 @@ public class Pharmacy_org_class extends org_class{
     @Override
     public ArrayList<Role_class> getSupportedRole() {
         ArrayList<Role_class> roles = new ArrayList();
-        roles.add(new PharmacyRole());
+        roles.add(new Pharmacy_role_class());
         return roles;
     }
 

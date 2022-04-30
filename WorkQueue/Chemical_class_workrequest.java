@@ -8,7 +8,7 @@ package WorkQueue;
  *
  * @author dpsmv
  */
-public class Chemical_class_workrequest {
+public class Chemical_class_workrequest extends Workrequest_class{
    private String chemical_status;
     private String chemical_Name;
     private int ChemiacalQuantity;

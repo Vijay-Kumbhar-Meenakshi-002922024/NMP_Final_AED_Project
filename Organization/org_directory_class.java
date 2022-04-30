@@ -22,32 +22,32 @@ public class org_directory_class {
     }
      
  public  org_class CreateOrg(Type type){
-        org_class org = null;
+        org_class org_class = null;
      
         if (type.getValue().equals(Type.Doctor.getValue())){
-            org = new Doctor_org_class();
-            OrgList.add(org);
+            org_class = new Doctor_org_class();
+            OrgList.add(org_class);
         }
         else if (type.getValue().equals(Type.Lab.getValue())){
-            org=new Lab_org_class();
-            OrgList.add(org);
+            org_class=new Lab_org_class();
+            OrgList.add(org_class);
         }
         
         else if (type.getValue().equals(Type.Pharmacy.getValue())){
-            org=new Pharmacy_org_class();
-            OrgList.add(org);
+            org_class=new Pharmacy_org_class();
+            OrgList.add(org_class);
         }
         
         else if (type.getValue().equals(Type.Drug.getValue())){
-            org=new drug_org_class();
-            OrgList.add(org);
+            org_class=new drug_org_class();
+            OrgList.add(org_class);
         }
         
         else if (type.getValue().equals(Type.Chemical.getValue())){
-            org=new chemical_org_class();
-            OrgList.add(org);
+            org_class=new chemical_org_class();
+            OrgList.add(org_class);
         }
-        return org;
+        return org_class;
     }
         
         

@@ -23,9 +23,9 @@ public class chemical_org_class extends org_class{
     
     @Override
     public ArrayList<Role_class> getSupportedRole() {
-        ArrayList<Role_class> roles = new ArrayList();
-        roles.add(new ChemicalRole());
-        return roles;
+        ArrayList<Role_class> Role_class = new ArrayList();
+        Role_class.add(new ChemicalRole());
+        return Role_class;
     }
 
     

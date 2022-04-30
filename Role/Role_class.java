@@ -40,15 +40,18 @@ public abstract class Role_class {
         
      }
       public abstract JPanel createWorkArea(JPanel userProcessContainer, 
-            User_account_class account, 
+            User_account_class User_account_class, 
             org_class organization, 
-            Enterprise_class enterprise, 
-            EcoCommunity business,Network_class network);
+            Enterprise_class enterprise_class, 
+            EcoCommunity ecoCommunity,
+            Network_class network_class);
 
     @Override
     public String toString() {
         return this.getClass().getName();
     }
-     
+    
+    
+    
 }
 

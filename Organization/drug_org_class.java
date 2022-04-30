@@ -26,9 +26,9 @@ public class drug_org_class extends org_class{
      
        @Override
     public ArrayList<Role_class> getSupportedRole() {
-        ArrayList<Role_class> roles = new ArrayList();
-        roles.add(new DrugRole());
-        return roles;
+        ArrayList<Role_class> Role_class = new ArrayList();
+        Role_class.add(new DrugRole());
+        return Role_class;
     }
 
     public ArrayList<Chemical_Mixture_Class> getChem_List() {

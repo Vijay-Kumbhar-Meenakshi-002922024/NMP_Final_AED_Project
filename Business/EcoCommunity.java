@@ -20,17 +20,17 @@ import java.util.ArrayList;
  */
 public class EcoCommunity extends org_class{
     
-    private static EcoCommunity Business;
+    private static EcoCommunity ecoCommunity;
     private ArrayList<Network_class> Network_List;
     private Chemical_List_Class chemical_List;
     private Drug_List_Class Drug_List;
     private Genetics_History_Class Gene_List;
    
     public static EcoCommunity getInstance(){
-        if(Business==null){
-            Business=new EcoCommunity();
+        if(ecoCommunity==null){
+            ecoCommunity=new EcoCommunity();
         }
-        return Business;
+        return ecoCommunity;
     }
     
     public Network_class CreateAndAddNetwork(){
@@ -42,7 +42,7 @@ public class EcoCommunity extends org_class{
     @Override
     public ArrayList<Role_class> getSupportedRole() {
         ArrayList<Role_class> r =new ArrayList<Role_class>();
-        r.add(new  System_admin_role_class());
+        r.add(new System_admin_role_class());
         return r;
     }
     
@@ -95,6 +95,19 @@ public class EcoCommunity extends org_class{
     public void setGene_List(Genetics_History_Class Gene_List) {
         this.Gene_List = Gene_List;
     }
+
+   
+
+    public static EcoCommunity getEcoCommunity() {
+        return ecoCommunity;
+    }
+
+    public static void setEcoCommunity(EcoCommunity ecoCommunity) {
+        EcoCommunity.ecoCommunity = ecoCommunity;
+    }
+    
+    
+    
     
     
 }

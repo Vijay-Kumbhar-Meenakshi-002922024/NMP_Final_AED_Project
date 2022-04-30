@@ -3,11 +3,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Network;
-
+import Enterprise.Enterprise_Directory;
 /**
  *
  * @author dpsmv
  */
 public class Network_class {
+     private String name;
+    private Enterprise_Directory enterpriseDirectory;
+    
+    public Network_class(){
+        enterpriseDirectory=new Enterprise_Directory();
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Enterprise_Directory getEnterpriseDirectory() {
+        return enterpriseDirectory;
+    }
+    
+    @Override
+    public String toString(){
+        return name;
+    }
     
 }

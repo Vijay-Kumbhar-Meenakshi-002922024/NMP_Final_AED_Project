@@ -14,7 +14,7 @@ public class System_Configuration_Class {
     
      public static EcoCommunity configure(){
         
-        EcoCommunity sys = EcoCommunity.getInstance();
+        EcoCommunity ecoCommunity = EcoCommunity.getInstance();
         
         //Create a network
         //create an enterprise
@@ -23,11 +23,11 @@ public class System_Configuration_Class {
         //create user account
         
         
-        Employee employee = sys.getEmployeeDirectory().CreateEmployeeData("RRH");
+        Employee employee = ecoCommunity.getEmployeeDirectory().CreateEmployeeData("RRH");
         
-        User_account_class ua = sys.getUserAccountDirectory().createUserAccount("sysadmin", "sysadmin", employee, new System_admin_role_class());
+        User_account_class ua = ecoCommunity.getUserAccountDirectory().createUserAccount("sysadmin", "sysadmin", employee, new System_admin_role_class());
         
-        return sys;
+        return ecoCommunity;
     }
     
 }
