@@ -12,7 +12,7 @@ import Genetics.Genetic_class;
  *
  * @author dpsmv
  */
-public class lab_class_workrequest {
+public class lab_class_workrequest extends Workrequest_class{
     
     private String Test_Result;
     private Map<Disease_class,List<Genetic_class>>diseaseListGenes;

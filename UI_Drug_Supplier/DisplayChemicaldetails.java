@@ -15,7 +15,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-import UI_Chemical_Role.PharmacyRole.PharmacyWorkArea;
+import UI.PHARMACYROLE.PharmacyWorkAreaJPanel;
 
 /**
  *
@@ -184,7 +184,7 @@ public class DisplayChemicaldetails extends javax.swing.JPanel {
         userProcessContainer.remove(this);
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
-        ViewChemicalRequestsJPanel me = (ViewChemicalRequestsJPanel) component;
+        DisplayChemicalRequestPanel me = (DisplayChemicalRequestPanel) component;
         me.reorderTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);

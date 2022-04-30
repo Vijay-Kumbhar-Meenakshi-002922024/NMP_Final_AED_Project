@@ -60,7 +60,7 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        for (Workrequest_class request : drugOrganization.getWorkQueue().getWorkRequestList()) {
+        for (Workrequest_class request : drugOrganization.getWorkQueue_class().getWork_Request_List()) {
             if ((( Drug_class_workrequest) request).getPatient() == null) {
                 Object[] row = new Object[6];
                 row[0] = ((Drug_class_workrequest) request);
@@ -227,14 +227,14 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
         }
         int flag = 0;
 
-        if (jTable1.getValueAt(selectedRow, 4).equals("Processing") && userAccount.getUser_Name().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
+        if (jTable1.getValueAt(selectedRow, 4).equals("Processing") && userAccount.getUserName().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
 
             flag = 1;
         }
         if (flag != 1) {
             if (jTable1.getValueAt(selectedRow, 4) != null) {
 
-                if (!(((jTable1.getValueAt(selectedRow, 4).equals("Assigned"))) && (userAccount.getUser_Name().equalsIgnoreCase(request.getWorkrequest_receiver().toString())))) {
+                if (!(((jTable1.getValueAt(selectedRow, 4).equals("Assigned"))) && (userAccount.getUserName().equalsIgnoreCase(request.getWorkrequest_receiver().toString())))) {
                     JOptionPane.showMessageDialog(null, "Task is not assigned to you for process");
                     return;
                 }
@@ -243,7 +243,7 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
 
         request.setWorkrequest_status("Processing");
 
-        ProcessDrugWorkRequest processWorkRequestJPanel = new ProcessDrugWorkRequest(userProcessContainer, request);
+        ProcessWorkRequestForDrugPanel processWorkRequestJPanel = new ProcessWorkRequestForDrugPanel(userProcessContainer, request);
         userProcessContainer.add("processWorkRequestJPanel", processWorkRequestJPanel);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         log.debug(userAccount+" "+"entering processing page");
@@ -271,14 +271,14 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
         }
         //to set the falg if already theere existing job
         int flag = 0;
-        for (Workrequest_class request : drugOrganization.getWorkQueue().getWorkRequestList()) {
+        for (Workrequest_class request : drugOrganization.getWorkQueue_class().getWork_Request_List()) {
 
             if (request.getWorkrequest_status()== null) {
                 continue;
             }
             if (request.getWorkrequest_status().equals("Assigned")) {
                 if (request.getWorkrequest_receiver()!= null) {
-                    if (userAccount.getUser_Name().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
+                    if (userAccount.getUserName().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
                         flag = 1;
                     }
                 }
@@ -290,14 +290,14 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
 
         }
         int flag1 = 0;
-        for (Workrequest_class request : drugOrganization.getWorkQueue().getWorkRequestList()) {
+        for (Workrequest_class request : drugOrganization.getWorkQueue_class().getWork_Request_List()) {
 
             if (request.getWorkrequest_status()== null) {
                 continue;
             }
             if (request.getWorkrequest_status().equals("Processing")) {
                 if (request.getWorkrequest_receiver()!= null) {
-                    if (userAccount.getUser_Name().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
+                    if (userAccount.getUserName().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
                         flag1 = 1;
                     }
                 }
@@ -328,7 +328,7 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
         
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         log.debug(userAccount+" "+"entering chemical requests page");
-        userProcessContainer.add("ViewChemicalsRequestJPanel", new ViewChemicalRequestsJPanel(userProcessContainer, userAccount, enterprise, drugOrganization, network));
+        userProcessContainer.add("ViewChemicalsRequestJPanel", new DisplayChemicalRequestPanel(userProcessContainer, userAccount, enterprise, drugOrganization, network));
         layout.next(userProcessContainer);
         
     }//GEN-LAST:event_btnRequestChemicalActionPerformed
@@ -338,7 +338,7 @@ public class Workspace_Drug_Supplier extends javax.swing.JPanel {
         
          CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         log.debug(userAccount+" "+"entering lab requests page");
-        userProcessContainer.add("LabResultsJPanel", new LabResultsJpanel(userProcessContainer, userAccount, enterprise, drugOrganization, network, business));
+        userProcessContainer.add("LabResultsJPanel", new LabResultsPanel(userProcessContainer, userAccount, enterprise, drugOrganization, network, business));
         layout.next(userProcessContainer);
         
     }//GEN-LAST:event_btnViewLabResultsActionPerformed

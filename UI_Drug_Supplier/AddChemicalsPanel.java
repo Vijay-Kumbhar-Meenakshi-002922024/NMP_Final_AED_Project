@@ -244,7 +244,7 @@ public class AddChemicalsPanel extends javax.swing.JPanel {
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
         AddDrugPanel dwjp = (AddDrugPanel) component;
-        dwjp.populateTable();
+        dwjp.generateTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
         

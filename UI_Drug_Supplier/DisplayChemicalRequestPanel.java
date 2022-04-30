@@ -3,6 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
+import Chemical_Repository.Chemical_Mixture_Class;
+import Business.EcoCommunity;
+import Enterprise.Enterprise_class;
+import Medical_Repository.Medical_Repository_Class;
+import Network.Network_class;
+import Organization.drug_org_class;
+import Organization.org_class;
+import User_account.User_account_class;
+import WorkQueue.Chemical_class_workrequest;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
+import UI.PHARMACYROLE.ViewPharmacyDetailsJPanel;
+
+
 
 /**
  *
@@ -10,13 +29,49 @@ package UI_Drug_Supplier;
  */
 public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
 
+    private JPanel userProcessContainer;
+    private EcoCommunity business;
+    private User_account_class userAccount;
+    private drug_org_class drugOrganization ;
+    private Enterprise_class enterprise;
+    private Network_class network;
+    private static Logger log = Logger.getLogger(DisplayChemicalRequestPanel.class);
+    private static final String CLASS_NAME = DisplayChemicalRequestPanel.class.getName();
+
+    
     /**
      * Creates new form DisplayChemicalRequestPanel
      */
-    public DisplayChemicalRequestPanel() {
+    public DisplayChemicalRequestPanel(JPanel userProcessContainer,User_account_class userAccount,
+            Enterprise_class enterprise, drug_org_class drugOrganization,Network_class network) {
+      
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.userAccount = userAccount;
+        this.drugOrganization = drugOrganization;
+        this.enterprise = enterprise;
+        this.network = network;
+        reorderTable();
     }
 
+     public void reorderTable(){
+        int rowCount = jTable1.getRowCount();
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        for(int i=rowCount-1;i>=0;i--) {
+            model.removeRow(i);
+        }
+      for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+            Object row[] = new Object[6];
+            row[0] = mi;
+            row[1] = mi.getSerial_Number();
+            row[2]= mi.getAvailable_Quantity();
+            row[3]=mi.getRequired_Quantity();
+            row[4]= mi.getReorder_Status();
+            //row[5]=mi.getReorderStatus();
+            model.addRow(row);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,6 +84,19 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         lblChemicalRequests = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        lblSerialNumber = new javax.swing.JLabel();
+        lblChemicalName = new javax.swing.JLabel();
+        lblAvailiableQuantity = new javax.swing.JLabel();
+        lblRequiredQuantity = new javax.swing.JLabel();
+        txtChemicalName = new javax.swing.JTextField();
+        txtSerialNumber = new javax.swing.JTextField();
+        txtAvailableQuantity = new javax.swing.JTextField();
+        txtRequiredQuantity = new javax.swing.JTextField();
+        btnAddChemical = new javax.swing.JButton();
+        btnback = new javax.swing.JButton();
+        btnInventoryStatusCheck = new javax.swing.JButton();
+        btnViewRequests = new javax.swing.JButton();
+        btnViewDetails = new javax.swing.JButton();
 
         lblChemicalRequests.setText("Chemical Requests");
 
@@ -46,35 +114,302 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        lblSerialNumber.setText("Serial Number");
+
+        lblChemicalName.setText("Chemical Name");
+
+        lblAvailiableQuantity.setText("Availiable Quantity");
+
+        lblRequiredQuantity.setText("Required Quantity");
+
+        btnAddChemical.setText("Add Chemical");
+        btnAddChemical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddChemicalActionPerformed(evt);
+            }
+        });
+
+        btnback.setText("Back");
+        btnback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbackActionPerformed(evt);
+            }
+        });
+
+        btnInventoryStatusCheck.setText("Inventory Status Check");
+        btnInventoryStatusCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventoryStatusCheckActionPerformed(evt);
+            }
+        });
+
+        btnViewRequests.setText("View Requests");
+        btnViewRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewRequestsActionPerformed(evt);
+            }
+        });
+
+        btnViewDetails.setText("View Details");
+        btnViewDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDetailsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(179, 179, 179)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(440, 440, 440)
-                        .addComponent(lblChemicalRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(357, Short.MAX_VALUE))
+                    .addComponent(lblSerialNumber)
+                    .addComponent(lblChemicalName)
+                    .addComponent(lblAvailiableQuantity)
+                    .addComponent(lblRequiredQuantity))
+                .addGap(72, 72, 72)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtRequiredQuantity)
+                    .addComponent(txtAvailableQuantity)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtChemicalName, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(74, 74, 74)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnViewRequests)
+                    .addComponent(btnInventoryStatusCheck)
+                    .addComponent(btnViewDetails)))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(103, 103, 103)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(344, 344, 344)
+                .addComponent(lblChemicalRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(169, 169, 169)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnback)
+                    .addComponent(btnAddChemical)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
+                .addGap(47, 47, 47)
                 .addComponent(lblChemicalRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(404, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSerialNumber)
+                            .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnInventoryStatusCheck)
+                        .addGap(9, 9, 9)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblChemicalName)
+                    .addComponent(txtChemicalName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnViewRequests)
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAvailiableQuantity)
+                    .addComponent(txtAvailableQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRequiredQuantity)
+                            .addComponent(txtRequiredQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(btnViewDetails)))
+                .addGap(35, 35, 35)
+                .addComponent(btnAddChemical)
+                .addGap(18, 18, 18)
+                .addComponent(btnback)
+                .addContainerGap(104, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddChemicalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddChemicalActionPerformed
+        // TODO add your handling code here:
+        
+        Chemical_Mixture_Class m=new Chemical_Mixture_Class();
+        String name=txtChemicalName.getText().trim();      
+        if(name.isEmpty())
+        {
+         JOptionPane.showMessageDialog(null,"Chemical Name is empty");
+            return;   
+        }
+        m.setChemical_Name(txtChemicalName.getText());
+        try
+        {
+        int availableQuantity= Integer.parseInt(txtAvailableQuantity.getText());
+        m.setAvailable_Quantity(availableQuantity);
+        }
+         catch(NumberFormatException e)
+        {
+             JOptionPane.showMessageDialog(null,"available quantity must be a integer");
+            return;   
+        }
+         try
+        {
+        int serialNumber= Integer.parseInt(txtSerialNumber.getText());
+        m.setSerial_Number(serialNumber);
+        }
+         catch(NumberFormatException e)
+        {
+             JOptionPane.showMessageDialog(null,"Serial number  must be a integer");
+            return;   
+        }
+         try{
+        int requiredQuantity= Integer.parseInt(txtRequiredQuantity.getText());
+        m.setRequired_Quantity(requiredQuantity);
+        }
+         catch(NumberFormatException e){
+
+            JOptionPane.showMessageDialog(null,"Required quantity must be integer!");
+            return;
+        }
+         drugOrganization.addChemical(m);
+        m.setReorder_Status("N");
+         DefaultTableModel dtm =(DefaultTableModel) jTable1.getModel();
+
+        dtm.setRowCount(0);
+        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+            Object row[] = new Object[5];
+            row[0] = mi;
+            row[1] = mi.getSerial_Number();
+            row[2]= mi.getAvailable_Quantity();
+            row[3]=mi.getRequired_Quantity();
+            row[4]= mi.getReorder_Level();
+            dtm.addRow(row);
+        }
+         JOptionPane.showMessageDialog(null, "Chemical Added Successfully", "Warning", JOptionPane.INFORMATION_MESSAGE);
+        txtSerialNumber.setText("");
+        txtChemicalName.setText("");
+        txtAvailableQuantity.setText("");
+        txtRequiredQuantity.setText("");
+        log.debug(userAccount+" "+"added chemical"+name);
+        
+    }//GEN-LAST:event_btnAddChemicalActionPerformed
+
+    private void btnViewRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestsActionPerformed
+        // TODO add your handling code here:
+        
+         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+       userProcessContainer.add("ViewRequestJPanel", new  DisplayRequests(userProcessContainer, 
+               userAccount, enterprise, drugOrganization));
+        layout.next(userProcessContainer);
+        log.debug("entering view chemical requests page");
+        
+    }//GEN-LAST:event_btnViewRequestsActionPerformed
+
+    private void btnViewDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDetailsActionPerformed
+        // TODO add your handling code here:
+        
+         int row = jTable1.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(null, "Please select a row!!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Chemical_Mixture_Class mi = (Chemical_Mixture_Class)jTable1.getValueAt(row, 0);
+
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add("UpdateEntryJPanel", new DisplayChemicaldetails(userProcessContainer, userAccount, enterprise,mi));
+        layout.next(userProcessContainer);
+        log.debug(userAccount+" "+"entering view chemical details page");
+        
+    }//GEN-LAST:event_btnViewDetailsActionPerformed
+
+    private void btnbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbackActionPerformed
+        // TODO add your handling code here:
+        
+          userProcessContainer.remove(this);
+        Component[] componentArray = userProcessContainer.getComponents();
+        Component component = componentArray[componentArray.length - 1];
+        Workspace_Drug_Supplier dwjp = (Workspace_Drug_Supplier) component;
+        dwjp.generateTable();
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+        
+    }//GEN-LAST:event_btnbackActionPerformed
+
+    private void btnInventoryStatusCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryStatusCheckActionPerformed
+        // TODO add your handling code here:
+        
+         int i=0;
+        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+            i++;
+            
+        }
+        if(i<=0)
+        {
+            JOptionPane.showMessageDialog(null,"No chemicals are present for invetory check  ");
+            return;
+        }
+        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+
+            if(mi.getAvailable_Quantity()<=mi.getRequired_Quantity()){
+                if(!mi.getReorder_Status().equals("Y")){
+                    Chemical_class_workrequest request=new Chemical_class_workrequest();
+
+                    mi.setReorder_Status("Y");
+                    request.setChemical_Name(mi.getChemical_Name());
+                    request.setChemiacalQuantity(mi.getRequired_Quantity());
+                    request.setWorkrequest_sender(userAccount);
+
+                    userAccount.getWorkQueue_class().getWork_Request_List().add(request);
+                    for(Enterprise_class enterprise :network.getEnterpriseDirectory().getEnterpriseList() ){
+                        System.out.println("***** Organization Name:" +enterprise.getOrgName());
+                        for(org_class organization:enterprise.getOrg_Diectory(). getOrgList()){
+                            System.out.println("***** Organization Name:" +organization.getOrgName());
+                            if(organization.getOrgName().equals("Chemical Organization")){
+                                System.out.println("True");
+
+                                System.out.println("***** organization Name"+organization.getOrgName());
+
+                                organization.getWorkQueue_class().getWork_Request_List().add(request);
+                                log.debug("chemical request has been sent to chemical organization");
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        } 
+        JOptionPane.showMessageDialog(null, "Inventory status checked and updated!", "Warning", JOptionPane.INFORMATION_MESSAGE);
+       reorderTable();
+        
+        
+    }//GEN-LAST:event_btnInventoryStatusCheckActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddChemical;
+    private javax.swing.JButton btnInventoryStatusCheck;
+    private javax.swing.JButton btnViewDetails;
+    private javax.swing.JButton btnViewRequests;
+    private javax.swing.JButton btnback;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblAvailiableQuantity;
+    private javax.swing.JLabel lblChemicalName;
     private javax.swing.JLabel lblChemicalRequests;
+    private javax.swing.JLabel lblRequiredQuantity;
+    private javax.swing.JLabel lblSerialNumber;
+    private javax.swing.JTextField txtAvailableQuantity;
+    private javax.swing.JTextField txtChemicalName;
+    private javax.swing.JTextField txtRequiredQuantity;
+    private javax.swing.JTextField txtSerialNumber;
     // End of variables declaration//GEN-END:variables
 }

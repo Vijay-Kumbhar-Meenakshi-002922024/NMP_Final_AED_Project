@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import userinterface.LabAssistantRole.ProcessWorkRequestJPanel;
+import UI.LAB_ASSISTANT_ROLE.LabProcessRequestJPanel;
 /**
  *
  * @author dpsmv
@@ -53,7 +53,7 @@ public class LabResultsPanel extends javax.swing.JPanel {
         this.enterprise = enterprise;
         this.network = network;
         this.business = business;
-        generateTable();
+        populateTable();
     }
 
     /**
@@ -182,7 +182,7 @@ public class LabResultsPanel extends javax.swing.JPanel {
         }
         System.out.println(totaldrugGene.containsAll(patientGene));
          if (!totaldrugGene.containsAll(patientGene)) {
-                NonExistingGeneJpanel nonExistingGeneJpanel = new NonExistingGeneJpanel(userProcessContainer, userAccount, enterprise, drugOrganization, network);
+                NonAvailableGenePanel nonExistingGeneJpanel = new NonAvailableGenePanel(userProcessContainer, userAccount, enterprise, drugOrganization, network);
 
                 userProcessContainer.add("nonExistingGeneJpanel", nonExistingGeneJpanel);
                 log.debug(userAccount+" "+"entering nonexisting page as drug doesn't exist");
@@ -225,7 +225,7 @@ public class LabResultsPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for ( Workrequest_class request : drugOrganization.getWorkQueue().getWorkRequestList()) {
+        for ( Workrequest_class request : drugOrganization.getWorkQueue_class().getWork_Request_List()) {
 
             if (((Drug_class_workrequest) request).getPatient() != null) {
                 Object[] row = new Object[7];

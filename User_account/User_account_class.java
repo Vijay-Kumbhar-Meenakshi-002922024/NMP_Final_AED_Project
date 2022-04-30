@@ -14,22 +14,22 @@ import WorkQueue.WorkQueue_class;
  */
 public class User_account_class {
     
-     private String User_Name;
+     private String UserName;
     private String Password;
     private Employee Employee;
-    private Role_class Role;
-    private WorkQueue_class WorkQueue;
+    private Role_class Role_class;
+    private WorkQueue_class WorkQueue_class;
     
      public User_account_class() {
-        WorkQueue = new WorkQueue_class();
+        WorkQueue_class = new WorkQueue_class();
     }
 
-    public String getUser_Name() {
-        return User_Name;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setUser_Name(String User_Name) {
-        this.User_Name = User_Name;
+    public void setUserName(String UserName) {
+        this.UserName = UserName;
     }
 
     public String getPassword() {
@@ -48,25 +48,25 @@ public class User_account_class {
         this.Employee = Employee;
     }
 
-    public Role_class getRole() {
-        return Role;
+    public Role_class getRole_class() {
+        return Role_class;
     }
 
-    public void setRole(Role_class Role) {
-        this.Role = Role;
+    public void setRole_class(Role_class Role_class) {
+        this.Role_class = Role_class;
     }
 
-    public WorkQueue_class getWorkQueue() {
-        return WorkQueue;
+    public WorkQueue_class getWorkQueue_class() {
+        return WorkQueue_class;
     }
 
-    public void setWorkQueue(WorkQueue_class WorkQueue) {
-        this.WorkQueue = WorkQueue;
+    public void setWorkQueue(WorkQueue_class WorkQueue_class) {
+        this.WorkQueue_class = WorkQueue_class;
     }
     
     @Override
     public String toString() {
-        return User_Name;
+        return UserName;
     }
     
     

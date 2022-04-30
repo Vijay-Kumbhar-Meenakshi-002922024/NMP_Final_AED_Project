@@ -30,7 +30,7 @@ public class NonAvailableGenePanel extends javax.swing.JPanel {
      * Creates new form NonAvailableGenePanel
      */
     public NonAvailableGenePanel(JPanel userProcessContainer,User_account_class userAccount,
-            Enterprise_class enterprise_class, drug_org_class drugOrganization,Network_class network) {
+            Enterprise_class enterprise, drug_org_class drugOrganization,Network_class network) {
     
         initComponents();
         

@@ -18,8 +18,12 @@ public class WorkQueue_class {
         work_Request_List = new ArrayList();
     }
 
-    public ArrayList<Workrequest_class> getWorkRequestList() {
+  
+
+    public ArrayList<Workrequest_class> getWork_Request_List() {
         return work_Request_List;
     }
+
+    
      
  }
