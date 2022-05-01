@@ -6,7 +6,11 @@ package Network;
 import Enterprise.Enterprise_Directory;
 /**
  *
+ Pavan
  * @author korapava
+=======
+ * @author dpsmv
+ main
  */
 public class Network_class {
      private String name;

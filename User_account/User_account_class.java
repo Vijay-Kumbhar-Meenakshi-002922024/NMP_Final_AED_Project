@@ -10,6 +10,7 @@ import Role.Role_class;
 import WorkQueue.WorkQueue_class;
 /**
  *
+ Pavan
  * @author korapava
  */
 public class User_account_class {
@@ -30,6 +31,28 @@ public class User_account_class {
 
     public void setUser_Name(String User_Name) {
         this.User_Name = User_Name;
+
+ * @author dpsmv
+ */
+public class User_account_class {
+    
+     private String UserName;
+    private String Password;
+    private Employee Employee;
+    private Role_class Role_class;
+    private WorkQueue_class WorkQueue_class;
+    
+     public User_account_class() {
+        WorkQueue_class = new WorkQueue_class();
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String UserName) {
+        this.UserName = UserName;
+main
     }
 
     public String getPassword() {
@@ -48,6 +71,7 @@ public class User_account_class {
         this.Employee = Employee;
     }
 
+ Pavan
     public Role_class getRole() {
         return Role;
     }
@@ -62,11 +86,34 @@ public class User_account_class {
 
     public void setWorkQueue(WorkQueue_class WorkQueue) {
         this.WorkQueue = WorkQueue;
+
+    public Role_class getRole_class() {
+        return Role_class;
+    }
+
+    public void setRole_class(Role_class Role_class) {
+        this.Role_class = Role_class;
+    }
+
+    public WorkQueue_class getWorkQueue_class() {
+        return WorkQueue_class;
+    }
+
+    public void setWorkQueue(WorkQueue_class WorkQueue_class) {
+        this.WorkQueue_class = WorkQueue_class;
+main
     }
     
     @Override
     public String toString() {
+ Pavan
         return User_Name;
     }
     
+
+        return UserName;
+    }
+    
+    
+ main
 }
