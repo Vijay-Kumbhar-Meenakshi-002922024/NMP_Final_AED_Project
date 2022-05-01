@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
-import WorkQueue.Drug_class_workrequest;
+import Business.WorkQueue.DrugWorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.Calendar;
@@ -14,19 +14,19 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class ProcessWorkRequestForDrugPanel extends javax.swing.JPanel {
 
     JPanel userProcessContainer;
-    Drug_class_workrequest request;
+DrugWorkRequest request;
     private static Logger log = Logger.getLogger(ProcessWorkRequestForDrugPanel.class);
     private static final String CLASS_NAME = ProcessWorkRequestForDrugPanel.class.getName();
     
     /**
      * Creates new form ProcessWorkRequestForDrugPanel
      */
-    public ProcessWorkRequestForDrugPanel(JPanel userprocessContainer,Drug_class_workrequest request) {
+    public ProcessWorkRequestForDrugPanel(JPanel userprocessContainer,DrugWorkRequest request) {
         initComponents();
         this.userProcessContainer=userprocessContainer;
         this.request=request;
@@ -114,13 +114,13 @@ public class ProcessWorkRequestForDrugPanel extends javax.swing.JPanel {
     private void btnUpdateStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStatusActionPerformed
         // TODO add your handling code here:
         
-         request.setWorkrequest_status("Completed");
+         request.setStatus("Completed");
        try{ 
            int year=DateValue.getCalendar().get(Calendar.YEAR);
         int month=DateValue.getCalendar().get(Calendar.MONTH);
         int day=DateValue.getCalendar().get(Calendar.DAY_OF_MONTH);
          String result=year+"-"+month+"-"+day;
-           ((Drug_class_workrequest) request).setDelivery_Time(result);
+           ((DrugWorkRequest) request).setDeliveryTime(result);
         txtChooseDeliveryDate.setText(result);
        }
        catch(Exception e)

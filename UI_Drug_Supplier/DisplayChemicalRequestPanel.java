@@ -3,15 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
-import Chemical_Repository.Chemical_Mixture_Class;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Medical_Repository.Medical_Repository_Class;
-import Network.Network_class;
-import Organization.drug_org_class;
-import Organization.org_class;
-import User_account.User_account_class;
-import WorkQueue.Chemical_class_workrequest;
+import Business.ChemicalInventory.ChemicalCompound;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.MedicalInventory.MedicalInventory;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.ChemicalWorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -19,22 +19,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-
+import UI.PHARMACYROLE.ViewPharmacyDetailsJPanel;
 
 
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
 
-    private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization ;
-    private Enterprise_class enterprise;
-    private Network_class network;
+  private JPanel userProcessContainer;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization ;
+    private Enterprise enterprise;
+    private Network network;
     private static Logger log = Logger.getLogger(DisplayChemicalRequestPanel.class);
     private static final String CLASS_NAME = DisplayChemicalRequestPanel.class.getName();
 
@@ -42,9 +42,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
     /**
      * Creates new form DisplayChemicalRequestPanel
      */
-    public DisplayChemicalRequestPanel(JPanel userProcessContainer,User_account_class userAccount,
-            Enterprise_class enterprise, drug_org_class drugOrganization,Network_class network) {
-      
+    public DisplayChemicalRequestPanel(JPanel userProcessContainer,UserAccount userAccount,Enterprise enterprise, DrugOrganization drugOrganization,Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -59,14 +57,13 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
         for(int i=rowCount-1;i>=0;i--) {
             model.removeRow(i);
-        }
-      for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+        } for(ChemicalCompound mi : drugOrganization.getChemList()){
             Object row[] = new Object[6];
             row[0] = mi;
-            row[1] = mi.getSerial_Number();
-            row[2]= mi.getAvailable_Quantity();
-            row[3]=mi.getRequired_Quantity();
-            row[4]= mi.getReorder_Status();
+            row[1] = mi.getSerialNumber();
+            row[2]= mi.getAvailQuantity();
+            row[3]=mi.getRequiredQuantity();
+            row[4]= mi.getReorderStatus();
             //row[5]=mi.getReorderStatus();
             model.addRow(row);
         }
@@ -240,19 +237,19 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
 
     private void btnAddChemicalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddChemicalActionPerformed
         // TODO add your handling code here:
-        
-        Chemical_Mixture_Class m=new Chemical_Mixture_Class();
+     
+        ChemicalCompound m=new ChemicalCompound();
         String name=txtChemicalName.getText().trim();      
         if(name.isEmpty())
         {
          JOptionPane.showMessageDialog(null,"Chemical Name is empty");
             return;   
         }
-        m.setChemical_Name(txtChemicalName.getText());
+        m.setChemicalName(txtChemicalName.getText());
         try
         {
         int availableQuantity= Integer.parseInt(txtAvailableQuantity.getText());
-        m.setAvailable_Quantity(availableQuantity);
+        m.setAvailQuantity(availableQuantity);
         }
          catch(NumberFormatException e)
         {
@@ -262,7 +259,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
          try
         {
         int serialNumber= Integer.parseInt(txtSerialNumber.getText());
-        m.setSerial_Number(serialNumber);
+        m.setSerialNumber(serialNumber);
         }
          catch(NumberFormatException e)
         {
@@ -271,7 +268,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         }
          try{
         int requiredQuantity= Integer.parseInt(txtRequiredQuantity.getText());
-        m.setRequired_Quantity(requiredQuantity);
+        m.setRequiredQuantity(requiredQuantity);
         }
          catch(NumberFormatException e){
 
@@ -279,17 +276,17 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
             return;
         }
          drugOrganization.addChemical(m);
-
+        m.setReorderStatus("N");
          DefaultTableModel dtm =(DefaultTableModel) jTable1.getModel();
 
         dtm.setRowCount(0);
-        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+        for(ChemicalCompound mi : drugOrganization.getChemList()){
             Object row[] = new Object[5];
             row[0] = mi;
-            row[1] = mi.getSerial_Number();
-            row[2]= mi.getAvailable_Quantity();
-            row[3]=mi.getRequired_Quantity();
-            row[4]= mi.getReorder_Level();
+            row[1] = mi.getSerialNumber();
+            row[2]= mi.getAvailQuantity();
+            row[3]=mi.getRequiredQuantity();
+            row[4]= mi.getReorderStatus();
             dtm.addRow(row);
         }
          JOptionPane.showMessageDialog(null, "Chemical Added Successfully", "Warning", JOptionPane.INFORMATION_MESSAGE);
@@ -305,7 +302,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         
          CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-
+       userProcessContainer.add("ViewRequestJPanel", new  DisplayRequests(userProcessContainer, 
                userAccount, enterprise, drugOrganization));
         layout.next(userProcessContainer);
         log.debug("entering view chemical requests page");
@@ -320,7 +317,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select a row!!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Chemical_Mixture_Class mi = (Chemical_Mixture_Class)jTable1.getValueAt(row, 0);
+        ChemicalCompound mi = (ChemicalCompound)jTable1.getValueAt(row, 0);
 
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.add("UpdateEntryJPanel", new DisplayChemicaldetails(userProcessContainer, userAccount, enterprise,mi));
@@ -346,7 +343,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         
          int i=0;
-        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+        for(ChemicalCompound mi : drugOrganization.getChemList()){
             i++;
             
         }
@@ -355,19 +352,30 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null,"No chemicals are present for invetory check  ");
             return;
         }
-        for(Chemical_Mixture_Class mi : drugOrganization.getChem_List()){
+        for(ChemicalCompound mi : drugOrganization.getChemList()){
 
-            if(mi.getAvailable_Quantity()<=mi.getRequired_Quantity()){
-                if(!mi.getReorder_Status().equals("Y")){
-                    Chemical_class_workrequest request=new Chemical_class_workrequest();
+            if(mi.getAvailQuantity()<=mi.getRequiredQuantity()){
+                if(!mi.getReorderStatus().equals("Y")){
+                    ChemicalWorkRequest request=new ChemicalWorkRequest();
 
+                    mi.setReorderStatus("Y");
+                    request.setChemicalName(mi.getChemicalName());
+                    request.setQuantity(mi.getRequiredQuantity());
+                    request.setSender(userAccount);
 
-                    request.setChemical_Name(mi.getChemical_Name());
-                    request.setChemiacalQuantity(mi.getRequired_Quantity());
-                    request.setWorkrequest_sender(userAccount);
+                    userAccount.getWorkQueue().getWorkRequestList().add(request);
+                    for(Enterprise enterprise :network.getEnterpriseDirectory().getEnterpriseList() ){
+                        System.out.println("***** Organization Name:" +enterprise.getName());
+                        for(Organization organization:enterprise.getOrganizationDirectory().getOrganizationList()){
+                            System.out.println("***** Organization Name:" +organization.getName());
+                            if(organization.getName().equals("Chemical Organization")){
+                                System.out.println("True");
 
+                                     System.out.println("***** organization Name"+organization.getName());
+
+                                organization.getWorkQueue().getWorkRequestList().add(request);
                                 log.debug("chemical request has been sent to chemical organization");
-                            }
+                             }
                         }
 
                     }

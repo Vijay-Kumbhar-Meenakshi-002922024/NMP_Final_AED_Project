@@ -4,38 +4,36 @@
  */
 package UI_Drug_Supplier;
 
-import Enterprise.Enterprise_class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
-import WorkQueue.Chemical_class_workrequest;
-import WorkQueue.Drug_class_workrequest;
-import WorkQueue.Workrequest_class;
+import Business.Enterprise.Enterprise;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.ChemicalWorkRequest;
+import Business.WorkQueue.DrugWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-
+import UI.PHARMACYROLE.PharmacyWorkAreaJPanel;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class DisplayRequests extends javax.swing.JPanel {
 
     
     private JPanel userProcessContainer;
-    private User_account_class userAccount;
-    private Enterprise_class enterprise;
-    private drug_org_class drugOrganization;
+    private UserAccount userAccount;
+    private Enterprise enterprise;
+    private DrugOrganization drugOrganization;
      private static Logger log = Logger.getLogger(DisplayRequests.class);
     private static final String CLASS_NAME = DisplayRequests.class.getName();
     /**
      * Creates new form DisplayRequests
      */
-    public DisplayRequests(JPanel userProcessContainer, User_account_class userAccount, Enterprise_class enterprise,
-            drug_org_class drugOrganization) {
-       
+    public DisplayRequests(JPanel userProcessContainer,UserAccount userAccount, Enterprise enterprise, DrugOrganization drugOrganization) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -54,18 +52,18 @@ public class DisplayRequests extends javax.swing.JPanel {
       
         
         model.setRowCount(0);
-
+        for (WorkRequest request : userAccount.getWorkQueue().getWorkRequestList()){
             Object[] row = new Object[5];
-            row[0] = ((Chemical_class_workrequest) request);
-            row[1] = ((Chemical_class_workrequest) request). getChemiacalQuantity();
-            row[2] = request.getWorkrequest_receiver();
-            String result = ((Chemical_class_workrequest) request).getChemical_status();
+            row[0] = ((ChemicalWorkRequest) request);
+            row[1] = ((ChemicalWorkRequest) request).getQuantity();
+            row[2] = request.getReceiver();
+            String result = ((ChemicalWorkRequest) request).getStatus();
             row[3] = result == null ? "Waiting" : result;
-            if(((Chemical_class_workrequest) request).getChemiacl_delivery_Time()==null){
+            if(((ChemicalWorkRequest) request).getDeliveryTime()==null){
                 row[4]="Details yet to be updated by supplier";
             }
-            else{
-            row[4]  = "Expected delivery time " +((Chemical_class_workrequest) request).getChemiacl_delivery_Time();
+           else{
+            row[4]  = "Expected delivery time " +((ChemicalWorkRequest) request).getDeliveryTime();
                     }
             
             model.addRow(row);

@@ -3,18 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
-import Doctor.Patient_class;
-import Drug.Drug_class;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Genetics.Genetic_class;
-import Network.Network_class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
-import WorkQueue.Drug_class_workrequest;
-import WorkQueue.lab_class_workrequest;
-import WorkQueue.Pharmacy_class_workrequest;
-import WorkQueue.Workrequest_class;
+import Business.Doctor.Patient;
+import Business.Drug.Drug;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Gene.Gene;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.DrugWorkRequest;
+import Business.WorkQueue.LabTestWorkRequest;
+import Business.WorkQueue.PharmacyWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -25,35 +25,34 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-
+import UI.LAB_ASSISTANT_ROLE.LabProcessRequestJPanel;
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class LabResultsPanel extends javax.swing.JPanel {
 
     
-    private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization;
-    private Enterprise_class enterprise;
-    private Network_class network;
+  private JPanel userProcessContainer;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization;
+    private Enterprise enterprise;
+    private Network network;
     private static Logger log = Logger.getLogger(LabResultsPanel.class);
     private static final String CLASS_NAME = LabResultsPanel.class.getName();
     /**
      * Creates new form LabResultsPanel
      */
-    public LabResultsPanel(JPanel userProcessContainer, User_account_class userAccount,
-            Enterprise_class enterprise, drug_org_class drugOrganization, Network_class network,EcoCommunity business) {
-         initComponents();
+    public LabResultsPanel(JPanel userProcessContainer, UserAccount userAccount, Enterprise enterprise, DrugOrganization drugOrganization, Network network,EcoSystem business) {
+        initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.drugOrganization = drugOrganization;
         this.enterprise = enterprise;
         this.network = network;
         this.business = business;
-
+        populateTable();
     }
 
     /**
@@ -147,26 +146,26 @@ public class LabResultsPanel extends javax.swing.JPanel {
         }
         
         int flag = 0;
-        Patient_class patient = (Patient_class)  jTable1.getValueAt(selectedRow, 0);
-        if(patient.getNew_Drug()!=null)
+        Patient patient = (Patient)  jTable1.getValueAt(selectedRow, 0);
+        if(patient.getNewDrug()!=null)
         {
             JOptionPane.showMessageDialog(null, "Drug has been identified already");
         }
         
-        List<String> patientGene = new ArrayList<>();
-        for (int i = 0; i < patient.getGene_History().getGenetics_History().size(); i++) {
-            Genetic_class gene = patient.getGene_History().getGenetics_History().get(i);
-            patientGene.add(gene.getGene_Name());
+          List<String> patientGene = new ArrayList<>();
+        for (int i = 0; i < patient.getGeneHistory().getGeneHistory().size(); i++) {
+            Gene g = patient.getGeneHistory().getGeneHistory().get(i);
+            patientGene.add(g.getGeneName());
 
         }
         Collections.sort(patientGene);
         List<String> totaldrugGene = new ArrayList<>();
-        for (Drug_class d : business.getDrug_List().getDrug_List()) {
+      for (Drug d : business.getDrugList().getDrugList()) {
             List<String> drugGene = new ArrayList<>();
-            for (int i = 0; i < d.getGenetics_History().getGenetics_History().size(); i++) {
-                Genetic_class g = d.getGenetics_History().getGenetics_History().get(i);
-                drugGene.add(g.getGene_Name());
-                totaldrugGene.add(g.getGene_Name());
+            for (int i = 0; i < d.getGeneHistory().getGeneHistory().size(); i++) {
+                Gene g = d.getGeneHistory().getGeneHistory().get(i);
+                drugGene.add(g.getGeneName());
+                totaldrugGene.add(g.getGeneName());
             }
             Collections.sort(drugGene);
 
@@ -182,7 +181,7 @@ public class LabResultsPanel extends javax.swing.JPanel {
         }
         System.out.println(totaldrugGene.containsAll(patientGene));
          if (!totaldrugGene.containsAll(patientGene)) {
-
+                NonAvailableGenePanel nonExistingGeneJpanel = new NonAvailableGenePanel(userProcessContainer, userAccount, enterprise, drugOrganization, network);
 
                 userProcessContainer.add("nonExistingGeneJpanel", nonExistingGeneJpanel);
                 log.debug(userAccount+" "+"entering nonexisting page as drug doesn't exist");
@@ -225,16 +224,16 @@ public class LabResultsPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
+        for (WorkRequest request : drugOrganization.getWorkQueue().getWorkRequestList()) {
 
-
-            if (((Drug_class_workrequest) request).getPatient() != null) {
+            if (((DrugWorkRequest) request).getPatient() != null) {
                 Object[] row = new Object[7];
-                row[0] = ((Drug_class_workrequest) request).getPatient();
-                row[1] = ((Drug_class_workrequest) request).getPatient().getAge();
-                row[2] = ((Drug_class_workrequest) request).getPatient().getSex();
-                row[3] = ((Drug_class_workrequest) request).getPatient().getTest();
+                row[0] = ((DrugWorkRequest) request).getPatient();
+                row[1] = ((DrugWorkRequest) request).getPatient().getAge();
+                row[2] = ((DrugWorkRequest) request).getPatient().getSex();
+                row[3] = ((DrugWorkRequest) request).getPatient().getTest();
 
-                row[4] = request.getWorkrequest_sender().getEmployee().getEmpName();
+                row[4] = request.getSender().getEmployee().getName();
                                model.addRow(row);
             }
         }

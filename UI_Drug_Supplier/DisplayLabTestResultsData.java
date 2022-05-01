@@ -6,7 +6,7 @@ package UI_Drug_Supplier;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class DisplayLabTestResultsData extends javax.swing.JPanel {
 

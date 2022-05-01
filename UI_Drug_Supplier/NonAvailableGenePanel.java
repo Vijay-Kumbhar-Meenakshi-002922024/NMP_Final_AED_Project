@@ -3,37 +3,34 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
-import Drug.Drug_class;
-import Business.EcoCommunity;
-import Network.Network_class;
-import Enterprise.Enterprise_class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
+import Business.Drug.Drug;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JPanel;
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class NonAvailableGenePanel extends javax.swing.JPanel {
 
     
     private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization ;
-    private Enterprise_class enterprise;
-    private Network_class network;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization ;
+    private Enterprise enterprise;
+    private Network network;
     
     /**
      * Creates new form NonAvailableGenePanel
      */
-    public NonAvailableGenePanel(JPanel userProcessContainer,User_account_class userAccount,
-            Enterprise_class enterprise, drug_org_class drugOrganization,Network_class network) {
-    
+    public NonAvailableGenePanel(JPanel userProcessContainer,UserAccount userAccount,Enterprise enterprise, DrugOrganization drugOrganization,Network network) {
         initComponents();
-        
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.drugOrganization = drugOrganization;
