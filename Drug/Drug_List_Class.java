@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class Drug_List_Class {
     

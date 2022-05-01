@@ -9,7 +9,7 @@ import Genetics.Genetics_History_Class;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class Drug_class {
    

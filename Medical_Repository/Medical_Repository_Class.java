@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class Medical_Repository_Class {
     

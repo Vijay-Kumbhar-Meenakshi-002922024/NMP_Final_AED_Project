@@ -6,7 +6,7 @@ package EmployeeData;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class Employee {
     
