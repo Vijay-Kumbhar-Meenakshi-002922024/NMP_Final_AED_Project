@@ -6,7 +6,7 @@ package Medical_Repository;
 import java.util.ArrayList;
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class Medical_RepositoryList_Class {
     
