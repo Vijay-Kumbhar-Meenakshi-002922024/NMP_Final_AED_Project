@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import UI.PHARMACYROLE.ViewPharmacyDetailsJPanel;
+
 
 
 
@@ -279,7 +279,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
             return;
         }
          drugOrganization.addChemical(m);
-        m.setReorder_Status("N");
+
          DefaultTableModel dtm =(DefaultTableModel) jTable1.getModel();
 
         dtm.setRowCount(0);
@@ -305,7 +305,7 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         
          CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-       userProcessContainer.add("ViewRequestJPanel", new  DisplayRequests(userProcessContainer, 
+
                userAccount, enterprise, drugOrganization));
         layout.next(userProcessContainer);
         log.debug("entering view chemical requests page");
@@ -361,22 +361,11 @@ public class DisplayChemicalRequestPanel extends javax.swing.JPanel {
                 if(!mi.getReorder_Status().equals("Y")){
                     Chemical_class_workrequest request=new Chemical_class_workrequest();
 
-                    mi.setReorder_Status("Y");
+
                     request.setChemical_Name(mi.getChemical_Name());
                     request.setChemiacalQuantity(mi.getRequired_Quantity());
                     request.setWorkrequest_sender(userAccount);
 
-                    userAccount.getWorkQueue_class().getWork_Request_List().add(request);
-                    for(Enterprise_class enterprise :network.getEnterpriseDirectory().getEnterpriseList() ){
-                        System.out.println("***** Organization Name:" +enterprise.getOrgName());
-                        for(org_class organization:enterprise.getOrg_Diectory(). getOrgList()){
-                            System.out.println("***** Organization Name:" +organization.getOrgName());
-                            if(organization.getOrgName().equals("Chemical Organization")){
-                                System.out.println("True");
-
-                                System.out.println("***** organization Name"+organization.getOrgName());
-
-                                organization.getWorkQueue_class().getWork_Request_List().add(request);
                                 log.debug("chemical request has been sent to chemical organization");
                             }
                         }

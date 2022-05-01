@@ -159,7 +159,7 @@ public class AvailableDrugResults extends javax.swing.JPanel {
          userProcessContainer.remove(this);
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
-        LabResultsPanel lrjp = (LabResultsPanel) component;
+
         lrjp.populateTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);

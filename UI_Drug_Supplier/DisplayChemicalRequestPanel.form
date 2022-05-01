@@ -28,9 +28,8 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="txtRequiredQuantity" max="32767" attributes="0"/>
                   <Component id="txtAvailableQuantity" max="32767" attributes="0"/>
-                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                      <Component id="txtChemicalName" min="-2" pref="84" max="-2" attributes="0"/>
-                      <Component id="txtSerialNumber" min="-2" pref="84" max="-2" attributes="0"/>
+       <EmptySpace max="32767" attributes="0"/>
+
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>

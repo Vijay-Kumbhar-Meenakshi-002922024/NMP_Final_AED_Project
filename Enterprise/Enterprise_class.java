@@ -15,7 +15,7 @@ public abstract class Enterprise_class extends org_class{
     private org_directory_class Org_Diectory;
     
       
-     public org_directory_class getOrg_Diectory() {
+
         return Org_Diectory;
     }
     
@@ -53,10 +53,5 @@ public abstract class Enterprise_class extends org_class{
         Org_Diectory=new org_directory_class();
     }
 
-    
-
-    public void setOrg_Diectory(org_directory_class Org_Diectory) {
-        this.Org_Diectory = Org_Diectory;
-    }
  
 }

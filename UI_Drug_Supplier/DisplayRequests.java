@@ -15,7 +15,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import UI.PHARMACYROLE.PharmacyWorkAreaJPanel;
+
 
 /**
  *
@@ -54,7 +54,7 @@ public class DisplayRequests extends javax.swing.JPanel {
       
         
         model.setRowCount(0);
-        for (Workrequest_class request : userAccount.getWorkQueue_class().getWork_Request_List()){
+
             Object[] row = new Object[5];
             row[0] = ((Chemical_class_workrequest) request);
             row[1] = ((Chemical_class_workrequest) request). getChemiacalQuantity();
