@@ -7,14 +7,14 @@ package UI.LAB_ASSISTANT_ROLE;
 /**
  *
  * @author dsnik
- */import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.Lab_org_class;
-import Organization.org_class;
-import User_account.User_account_class;
-import WorkQueue.lab_class_workrequest;
-import WorkQueue.Workrequest_class;
+ */import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.LabOrganization;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.LabTestWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,24 +27,24 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
      * Creates new form LabAssistantWorkAreaJPanel
      */
   private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private Lab_org_class labOrganization;
-    private Network_class network;
-    private Enterprise_class enterprise;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private LabOrganization LabOrganization;
+    private Network network;
+    private Enterprise enterprise;
     private static Logger log = Logger.getLogger(LabAssistantWorkAreaJPanel.class);
     private static final String CLASS_NAME = LabAssistantWorkAreaJPanel.class.getName();
 
     /**
      * Creates new form LabAssistantWorkAreaJPanel
      */
-    public LabAssistantWorkAreaJPanel(JPanel userProcessContainer, User_account_class userAccount, org_class organization, Enterprise_class enterprise, EcoCommunity business, Network_class network) {
+    public LabAssistantWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
         initComponents();
 
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.business = business;
-        this.labOrganization = (labOrganization) organization;
+        this.LabOrganization = (LabOrganization) organization;
         this.enterprise = enterprise;
         this.network = network;
         log.debug(userAccount+" "+"logged in");
@@ -159,7 +159,7 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
         //to check task is already assigned        
         if (jTable_LAB_WORJ.getValueAt(selectedRow, 6) != null) {
             if (jTable_LAB_WORJ.getValueAt(selectedRow, 5) != null) {
-                if (userAccount.getUser_Name().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
+                if (userAccount.getUsername().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
 
                     if (jTable_LAB_WORJ.getValueAt(selectedRow, 6).equals("Pending")) {
                         JOptionPane.showMessageDialog(null, "Task is already assigned");
@@ -180,23 +180,23 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
 
         //to check whether task is already assigined 
         if (jTable_LAB_WORJ.getValueAt(selectedRow, 5) != null) {
-            if (!userAccount.getUser_Name().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
+            if (!userAccount.getUsername().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
                 JOptionPane.showMessageDialog(null, "Task is already assigned");
                 return;
             }
         }
         int flag = 0;
 
-        for (Workrequest_class request : labOrganization.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : LabOrganization.getWorkQueue().getWorkRequestList()) {
 
-            if (request.getWorkrequest_status()== null) {
+            if (request.getStatus()== null) {
                 continue;
             }
-            if (request.getWorkrequest_status().equals("Pending")) {
+            if (request.getStatus().equals("Pending")) {
 
-                if (request.getWorkrequest_receiver()!= null) {
+                if (request.getReceiver()!= null) {
 
-                    if (userAccount.getUser_Name().equalsIgnoreCase(request.getWorkrequest_receiver().toString())) {
+                    if (userAccount.getUsername().equalsIgnoreCase(request.getReceiver().toString())) {
                         flag = 1;
                     }
                 }
@@ -208,13 +208,13 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
 
         }
         int flag1 = 0;
-        for (Workrequest_class request : labOrganization.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : LabOrganization.getWorkQueue().getWorkRequestList()) {
 
-            if (request.getWorkrequest_status()== null) {
+            if (request.getStatus()== null) {
                 continue;
             }
             if (jTable_LAB_WORJ.getValueAt(selectedRow, 5) != null) {
-                if (request.getWorkrequest_status().equals("Processing") && userAccount.getUser_Name().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
+                if (request.getStatus().equals("Processing") && userAccount.getUsername().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
                     flag1 = 1;
                 }
             }
@@ -225,9 +225,9 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
 
         }
 
-        Workrequest_class request = (Workrequest_class) jTable_LAB_WORJ.getValueAt(selectedRow, 0);
-        request.setWorkrequest_receiver(userAccount);
-        request.setWorkrequest_status("Pending");
+        WorkRequest request = (WorkRequest) jTable_LAB_WORJ.getValueAt(selectedRow, 0);
+        request.setReceiver(userAccount);
+        request.setStatus("Pending");
         log.debug(userAccount+" "+"has assigned the request");
         log.debug("status has been set to pending");
         populateTable();
@@ -248,7 +248,7 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         //to check whether the task is completed 
-        lab_class_workrequest request = (lab_class_workrequest) jTable_LAB_WORJ.getValueAt(selectedRow, 0);
+        LabTestWorkRequest request = (LabTestWorkRequest) jTable_LAB_WORJ.getValueAt(selectedRow, 0);
         if (jTable_LAB_WORJ.getValueAt(selectedRow, 6) != null) {
             if (((jTable_LAB_WORJ.getValueAt(selectedRow, 6).equals("Completed")))) {
 
@@ -258,7 +258,7 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
         }
         //to check whether task is assigned forr process
         if (jTable_LAB_WORJ.getValueAt(selectedRow, 5) != null) {
-            if (jTable_LAB_WORJ.getValueAt(selectedRow, 6) == null || !userAccount.getUser_Name().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
+            if (jTable_LAB_WORJ.getValueAt(selectedRow, 6) == null || !userAccount.getUsername().equalsIgnoreCase(jTable_LAB_WORJ.getValueAt(selectedRow, 5).toString())) {
                 JOptionPane.showMessageDialog(null, "Task is not assigned to you for process");
                 return;
             }
@@ -282,7 +282,7 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
 
         request.setStatus("Processing");
 
-        LabProcessRequestJPanel processWorkRequestJPanel = new LabProcessRequestJPanel(userProcessContainer, request, labOrganization, userAccount, network);
+        LabProcessRequestJPanel processWorkRequestJPanel = new LabProcessRequestJPanel(userProcessContainer, request, LabOrganization, userAccount, network);
         userProcessContainer.add("processWorkRequestJPanel", processWorkRequestJPanel);
         log.debug("entering process request page");
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
@@ -305,18 +305,18 @@ public class LabAssistantWorkAreaJPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (Workrequest_class request : labOrganization.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : LabOrganization.getWorkQueue().getWorkRequestList()) {
 
             Object[] row = new Object[8];
-            row[0] = ((lab_class_workrequest) request);
-            row[1] = ((lab_class_workrequest) request).getPatient().getAge();
-            row[2] = ((lab_class_workrequest) request).getPatient().getSex();
-            row[3] = request.getWorkrequest_message();
+            row[0] = ((LabTestWorkRequest) request);
+            row[1] = ((LabTestWorkRequest) request).getPatient().getAge();
+            row[2] = ((LabTestWorkRequest) request).getPatient().getSex();
+            row[3] = request.getMessage();
 
-            row[4] = request.getWorkrequest_sender().getEmployee().getEmpName();
-            row[5] = request.getWorkrequest_receiver()== null ? null : request.getWorkrequest_receiver().getEmployee().getName();
-            row[6] = request.getWorkrequest_status();
-            row[7] = ((lab_class_workrequest) request).getPatient().getNewDrug();
+            row[4] = request.getSender().getEmployee().getName();
+            row[5] = request.getReceiver()== null ? null : request.getReceiver().getEmployee().getName();
+            row[6] = request.getStatus();
+            row[7] = ((LabTestWorkRequest) request).getPatient().getNewDrug();
             model.addRow(row);
         }
     }

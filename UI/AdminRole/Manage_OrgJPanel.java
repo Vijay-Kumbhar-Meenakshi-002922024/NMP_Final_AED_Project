@@ -8,15 +8,15 @@ package UI.AdminRole;
  *
  * @author dsnik
  */
-import Chemical.ChemicalClass;
-import Enterprise.Chemical_Enterprise_class;
-import Enterprise.Drug_Enterprise_class;
-import Enterprise.Enterprise_class;
-import Enterprise.Hospital_Enterprise_class;
-import Enterprise.Pharmacy_Enterprise_class;
-import Organization.org_class;
-import Organization.org_class.Type;
-import Organization.org_directory_class;
+import Business.Chemical.Chemical;
+import Business.Enterprise.ChemicalEnterprise;
+import Business.Enterprise.DrugEnterprise;
+import Business.Enterprise.Enterprise;
+import Business.Enterprise.HospitalEnterprise;
+import Business.Enterprise.PharmacyEnterprise;
+import Business.Organization.Organization;
+import Business.Organization.Organization.Type;
+import Business.Organization.OrganizationDirectory;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -27,13 +27,13 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
     /**
      * Creates new form Manage_OrgJPanel
      */
-    private org_directory_class organizationDir;
+    private OrganizationDirectory organizationDir;
       private JPanel userProcessContainer;
-      private Enterprise_class enterprise;
+      private Enterprise enterprise;
       private static Logger log = Logger.getLogger(Manage_OrgJPanel.class);
       private static final String CLASS_NAME = Manage_OrgJPanel.class.getName();
       
-    public Manage_OrgJPanel(JPanel userProcessContainer,org_directory_class organizationDir,Enterprise_class enterprise) {
+    public Manage_OrgJPanel(JPanel userProcessContainer,OrganizationDirectory organizationDir,Enterprise enterprise) {
         initComponents();
         this.organizationDir = organizationDir;
         this.userProcessContainer = userProcessContainer;
@@ -55,9 +55,9 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
         jScrollPane_Table_Org = new javax.swing.JScrollPane();
         jTable_Org = new javax.swing.JTable();
         lbl_Org_Type = new javax.swing.JLabel();
-        jComboBox_Org_type = new javax.swing.JComboBox<>();
         Btn_back_Manage_Org = new javax.swing.JButton();
         btn_Add_org = new javax.swing.JButton();
+        jComboBox_Org_type = new javax.swing.JComboBox();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("MANAGE ORGANIZATIONS");
@@ -83,8 +83,6 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
         lbl_Org_Type.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_Org_Type.setText("Organization Type");
 
-        jComboBox_Org_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         Btn_back_Manage_Org.setText("BACK");
         Btn_back_Manage_Org.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,6 +91,14 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
         });
 
         btn_Add_org.setText("ADD ORGANIZATION");
+        btn_Add_org.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Add_orgActionPerformed(evt);
+            }
+        });
+
+        jComboBox_Org_type.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 20)); // NOI18N
+        jComboBox_Org_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -106,8 +112,8 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(173, 173, 173)
                         .addComponent(lbl_Org_Type, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65)
-                        .addComponent(jComboBox_Org_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addComponent(jComboBox_Org_type, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(253, 253, 253)
                         .addComponent(btn_Add_org))
@@ -115,7 +121,7 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
                         .addGap(296, 296, 296)
                         .addComponent(Btn_back_Manage_Org))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
+                        .addGap(110, 110, 110)
                         .addComponent(jScrollPane_Table_Org, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(491, Short.MAX_VALUE))
         );
@@ -126,13 +132,13 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox_Org_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_Org_Type, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_Org_Type, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_Org_type, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_Add_org)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane_Table_Org, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(27, 27, 27)
                 .addComponent(Btn_back_Manage_Org)
                 .addContainerGap(159, Short.MAX_VALUE))
         );
@@ -140,13 +146,26 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
 
     private void Btn_back_Manage_OrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_back_Manage_OrgActionPerformed
         // TODO add your handling code here:
+        
+        userProcessContainer.remove(this);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
     }//GEN-LAST:event_Btn_back_Manage_OrgActionPerformed
+
+    private void btn_Add_orgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Add_orgActionPerformed
+        // TODO add your handling code here:Type type = (Type) organizationComboBox.getSelectedItem();
+         Type type = (Type) jComboBox_Org_type.getSelectedItem();
+       organizationDir.createOrganization(type);
+        log.debug("Enterprise admin adding the following Organization" +type);
+        populateTable();
+        
+    }//GEN-LAST:event_btn_Add_orgActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_back_Manage_Org;
     private javax.swing.JButton btn_Add_org;
-    private javax.swing.JComboBox<String> jComboBox_Org_type;
+    private javax.swing.JComboBox jComboBox_Org_type;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane_Table_Org;
     private javax.swing.JTable jTable_Org;
@@ -154,52 +173,52 @@ public class Manage_OrgJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateTable() {
-      jComboBox_Org_type.removeAllItems();
-        for (org_class.Type type : org_class.Type.values()){
+     DefaultTableModel model = (DefaultTableModel) jTable_Org.getModel();
+        
+        model.setRowCount(0);
+        
+        for (Organization organization : organizationDir.getOrganizationList()){
+            Object[] row = new Object[2];
+            row[0] = organization.getOrganizationID();
+            row[1] = organization.getName();
             
-            if (!type.getValue().equals(org_class.Type.Admin.getValue()))
+            model.addRow(row);
+        }
+    
+    
+    }
+
+    private void populateComboBox() {
+       jComboBox_Org_type.removeAllItems();
+        for (Organization.Type type : Organization.Type.values()){
+            
+            if (!type.getValue().equals(Organization.Type.Admin.getValue()))
             {
 //                
-                if(enterprise instanceof Hospital_Enterprise_class){
+                if(enterprise instanceof HospitalEnterprise){
                     
-                     jComboBox_Org_type.addItem(org_class.Type.Doctor);
-                     jComboBox_Org_type.addItem(org_class.Type.Lab);
+                     jComboBox_Org_type.addItem(Organization.Type.Doctor);
+                     jComboBox_Org_type.addItem(Organization.Type.Lab);
                      break;
-                }else if(enterprise instanceof Pharmacy_Enterprise_class){
+                }else if(enterprise instanceof PharmacyEnterprise){
                     
-                     jComboBox_Org_type.addItem(org_class.Type.Pharmacy);
+                     jComboBox_Org_type.addItem(Organization.Type.Pharmacy);
                      break;
                     
                 }
-                else if(enterprise instanceof Drug_Enterprise_class)
+                else if(enterprise instanceof DrugEnterprise)
                 {
-                     jComboBox_Org_type.addItem(org_class.Type.Drug);
+                     jComboBox_Org_type.addItem(Organization.Type.Drug);
                      break;
                 }
-                else if(enterprise instanceof Chemical_Enterprise_class)
+                else if(enterprise instanceof ChemicalEnterprise)
                 {
-                  jComboBox_Org_type.addItem(org_class.Type.Chemical);
+                  jComboBox_Org_type.addItem(Organization.Type.Chemical);
                      break;  
                 }
                  
                     
             }
         }   
-    
-    }
-
-    private void populateComboBox() {
-       DefaultTableModel model = (DefaultTableModel) jTable_Org.getModel();
-        
-        model.setRowCount(0);
-        
-        for (org_class organization : organizationDir.getOrgList()){
-            Object[] row = new Object[2];
-            row[0] = organization.getOrgID();
-            row[1] = organization.getOrgName();
-            
-            model.addRow(row);
-        }
-    
     }
 }

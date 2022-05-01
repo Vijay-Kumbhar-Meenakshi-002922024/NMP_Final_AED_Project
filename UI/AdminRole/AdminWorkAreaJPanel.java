@@ -8,9 +8,9 @@ package UI.AdminRole;
  *
  * @author dsnik
  */
-import EmployeeData.Employee;
-import Enterprise.Enterprise_class;
-import Organization.org_class;
+import Business.Employee.Employee;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,14 +21,14 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
      * Creates new form JPanel
      */
     JPanel userProcessContainer;
-    Enterprise_class enterprise;
+    Enterprise enterprise;
     private static Logger log = Logger.getLogger(AdminWorkAreaJPanel.class);
     private static final String CLASS_NAME = AdminWorkAreaJPanel.class.getName();
-    public AdminWorkAreaJPanel(JPanel userProcessContainer, Enterprise_class enterprise) {
+    public AdminWorkAreaJPanel(JPanel userProcessContainer, Enterprise enterprise) {
         initComponents();
          this.enterprise = enterprise;
           this.userProcessContainer = userProcessContainer;
-          LBL_VALUE.setText(enterprise.getOrgName());
+          LBL_VALUE.setText(enterprise.getName());
           
     }
   
@@ -139,7 +139,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     private void btn_Manage_OrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Manage_OrgActionPerformed
         // TODO add your handling code here:
         
-         Manage_OrgJPanel manageOrganizationJPanel = new Manage_OrgJPanel(userProcessContainer, enterprise.getOrg_Diectory(),enterprise);
+         Manage_OrgJPanel manageOrganizationJPanel = new Manage_OrgJPanel(userProcessContainer, enterprise.getOrganizationDirectory(),enterprise);
         log.debug("Enterprise admin creating Organization \t"+CLASS_NAME);
         userProcessContainer.add("manageOrganization", manageOrganizationJPanel);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
@@ -149,7 +149,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     private void btn_Manage_EmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Manage_EmployeeActionPerformed
         // TODO add your handling code here:
          int Organisationcheck=0;
-        for(org_class o: enterprise.getOrg_Diectory().getOrgList())
+        for(Organization o: enterprise.getOrganizationDirectory().getOrganizationList())
         {
             Organisationcheck++;
             
@@ -160,7 +160,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-      Manage_EmployeeJPanel manageEmployeeJPanel = new Manage_EmployeeJPanel(userProcessContainer, enterprise.getOrg_Diectory());
+      Manage_EmployeeJPanel manageEmployeeJPanel = new Manage_EmployeeJPanel(userProcessContainer, enterprise.getOrganizationDirectory());
         log.debug("Enterprise admin adding Employee \t" +CLASS_NAME);
         userProcessContainer.add("manageEmployee", manageEmployeeJPanel);
 
@@ -171,9 +171,9 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     private void btn_Manage_USERActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Manage_USERActionPerformed
         // TODO add your handling code here:
          int employeecheck=0;
-        for(org_class o: enterprise.getOrg_Diectory().getOrgList())
+        for(Organization o: enterprise.getOrganizationDirectory().getOrganizationList())
         {
-            for(Employee e :o.getEmployeeDirectory().getEmpList())
+            for(Employee e :o.getEmployeeDirectory().getEmployeeList())
             employeecheck++;
             
         }

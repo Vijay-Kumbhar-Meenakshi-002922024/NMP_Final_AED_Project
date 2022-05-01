@@ -9,16 +9,16 @@ package UI.DOCTORROLE;
  * @author dsnik
  */
 
-import Doctor.Patient_class;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.Doctor_org_class;
-import Organization.Lab_org_class;
-import Organization.org_class;
-import User_account.User_account_class;
-import WorkQueue.lab_class_workrequest;
-import WorkQueue.Workrequest_class;
+import Business.Doctor.Patient;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DoctorOrganization;
+import Business.Organization.LabOrganization;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.LabTestWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
@@ -31,25 +31,27 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
     /**
      * Creates new form Request_from_Doctor_JPanel
      */
-     private JPanel userProcessContainer;
-    private User_account_class account;
-    private Doctor_org_class organization;
-    private Enterprise_class enterprise;
+    private JPanel userProcessContainer;
+    private UserAccount account;
+    private DoctorOrganization organization;
+    private Enterprise enterprise;
 
-    private Network_class network;
-    private EcoCommunity system;
-    private Enterprise_class.EnterpriseType enterpriseType;
+    private Network network;
+    private EcoSystem system;
+    private Enterprise.EnterpriseType enterpriseType;
     private static Logger log = Logger.getLogger(Request_from_Doctor_JPanel.class);
     private static final String CLASS_NAME = Request_from_Doctor_JPanel.class.getName();
-    public Request_from_Doctor_JPanel(JPanel userProcessContainer, User_account_class account, Doctor_org_class organization, Enterprise_class enterprise, EcoCommunity system, Network_class network) {
+    
+    public Request_from_Doctor_JPanel(JPanel userProcessContainer, UserAccount account, DoctorOrganization organization, Enterprise enterprise, EcoSystem system, Network network) {
+       
         initComponents();
-         this.userProcessContainer = userProcessContainer;
+        this.userProcessContainer = userProcessContainer;
         this.account = account;
         this.organization = organization;
         this.enterprise = enterprise;
         this.network = network;
         this.system = system;
-         LBL_VALUE.setText(this.enterprise.getOrgName());
+        LBL_VALUE.setText(enterprise.getName());
         populateRequestTable();
     }
 
@@ -90,7 +92,7 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
 
         LBL_GENDER.setText("GENDER");
 
-        jComboBox_GENDER.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_GENDER.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Please select--", "Male", "Female" }));
 
         LBL_TEST_REQ.setText("TEST REQ");
 
@@ -149,24 +151,19 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
                         .addGap(83, 83, 83)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(LBL_NAME)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(LBL_AGE)))
+                            .addComponent(LBL_AGE, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TXT_NAME, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TXT_AGE, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(78, 78, 78)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jComboBox_GENDER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(LBL_GENDER)
-                                    .addGap(111, 111, 111)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LBL_TEST_REQ)
-                                .addGap(43, 43, 43)
-                                .addComponent(TXT_TEST_REQ, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(LBL_TEST_REQ)
+                            .addComponent(LBL_GENDER))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox_GENDER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TXT_TEST_REQ, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(157, 157, 157)
@@ -251,21 +248,21 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
        
         
 
-        lab_class_workrequest request = new lab_class_workrequest();
+        LabTestWorkRequest request = new LabTestWorkRequest();
         request.setMessage(message);
         request.setSender(account);
         request.setStatus("Sent");
-        request.setPatient_Name(patientName);
-        Patient_class patient = new Patient_class();
-        patient.setPatient_Name(patientName);
+        request.setPatientName(patientName);
+        Patient patient = new Patient();
+        patient.setPatientName(patientName);
         patient.setAge(age);
         patient.setTest(message);
         patient.setSex(GENDER);
         request.setPatient(patient);
 
-        org_class org = null;
-        for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-            if (organization instanceof Lab_org_class) {
+        Organization org = null;
+        for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+            if (organization instanceof LabOrganization) {
                 org = organization;
                 break;
             }
@@ -309,7 +306,7 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
             return;
         }     
  
-        lab_class_workrequest request = (lab_class_workrequest) jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 0);
+        LabTestWorkRequest request = (LabTestWorkRequest) jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 0);
         System.out.println(jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 5));
         System.out.println(!(jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 5).toString().toLowerCase().equalsIgnoreCase("completed")));
         
@@ -352,7 +349,7 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
         }
        
 
-        lab_class_workrequest request = (lab_class_workrequest) jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 0);
+        LabTestWorkRequest request = (LabTestWorkRequest) jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 0);
          if(jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 6)==null || jTable_DOC_REQ_LAB_TEST.getValueAt(selectedRow, 6) == "N/A(Drug Exists)")
         {
             JOptionPane.showMessageDialog(null, "Clinical trail cannot be performed on this patient");
@@ -398,7 +395,7 @@ public class Request_from_Doctor_JPanel extends javax.swing.JPanel {
      DefaultTableModel model = (DefaultTableModel) jTable_DOC_REQ_LAB_TEST.getModel();
 
         model.setRowCount(0);
-        for (Workrequest_class request : account.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : account.getWorkQueue().getWorkRequestList()) {
             if (request instanceof LabTestWorkRequest) {
                 Object[] row = new Object[8];
                 row[0] = ((LabTestWorkRequest) request);

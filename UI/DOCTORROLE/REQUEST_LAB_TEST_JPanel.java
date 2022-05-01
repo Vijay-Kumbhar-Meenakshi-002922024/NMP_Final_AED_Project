@@ -8,9 +8,9 @@ package UI.DOCTORROLE;
  *
  * @author dsnik
  */
-import Genetics.Genetic_class;
+import Business.Gene.Gene;
 
-import WorkQueue.lab_class_workrequest;
+import Business.WorkQueue.LabTestWorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JPanel;
@@ -18,17 +18,17 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 public class REQUEST_LAB_TEST_JPanel extends javax.swing.JPanel {
  private JPanel userProcessContainer;
-    private lab_class_workrequest request;
+    private LabTestWorkRequest request;
     private static Logger log = Logger.getLogger(REQUEST_LAB_TEST_JPanel.class);
     private static final String CLASS_NAME = REQUEST_LAB_TEST_JPanel.class.getName();
     /**
      * Creates new form REQUEST_LAB_TEST_JPanel
      */
-    public REQUEST_LAB_TEST_JPanel(JPanel userProcessContainer, lab_class_workrequest request) {
+    public REQUEST_LAB_TEST_JPanel(JPanel userProcessContainer, LabTestWorkRequest request) {
         initComponents();
            this.userProcessContainer = userProcessContainer;
         this.request = request;
-        TXT_PATIENT_NAME.setText(request.getPatient_Name());
+        TXT_PATIENT_NAME.setText(request.getPatientName());
         populateTable();
     }
 
@@ -142,15 +142,15 @@ public class REQUEST_LAB_TEST_JPanel extends javax.swing.JPanel {
  DefaultTableModel model = (DefaultTableModel) jTable_LAB_REULTS.getModel();
 
         model.setRowCount(0);
-        System.out.println(((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History());
-        System.out.println(((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History().size());
+        System.out.println(((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory());
+        System.out.println(((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory().size());
 
-        for (Genetic_class g : ((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History()) {
+        for (Gene g : ((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory()) {
 
             Object[] row = new Object[2];
-            row[0] = g.getGene_id();
-            row[1] = g.getGene_Name();
-            System.out.println(((lab_class_workrequest) request).getPatient());
+            row[0] = g.getId();
+            row[1] = g.getGeneName();
+            System.out.println(((LabTestWorkRequest) request).getPatient());
 
             model.addRow(row);
             log.debug("displaying results");

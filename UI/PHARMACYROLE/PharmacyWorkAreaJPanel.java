@@ -9,16 +9,16 @@ package UI.PHARMACYROLE;
  * @author dsnik
  */
 
-import Enterprise.Enterprise_class;
-import Medical_Repository.Medical_Repository_Class;
-import Medical_Repository.Medical_RepositoryList_Class;
-import Network.Network_class;
-import Organization.org_class;
-import Organization.Pharmacy_org_class;
-import User_account.User_account_class;
-import WorkQueue.Drug_class_workrequest;
-import WorkQueue.Pharmacy_class_workrequest;
-import WorkQueue.Workrequest_class;
+import Business.Enterprise.Enterprise;
+import Business.MedicalInventory.MedicalInventory;
+import Business.MedicalInventory.MedicalInventoryList;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Organization.PharmacyOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.DrugWorkRequest;
+import Business.WorkQueue.PharmacyWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -32,17 +32,17 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form PharmacyWorkAreaJPanel
      */
-       JPanel userProcessContainer;
-    private User_account_class userAccount;
-    private Enterprise_class enterprise;
-    private Medical_RepositoryList_Class mil;
-    private org_class org;
-    private Pharmacy_org_class pharmorg;
-    private Network_class network;
+      JPanel userProcessContainer;
+    private UserAccount userAccount;
+    private Enterprise enterprise;
+    private MedicalInventoryList mil;
+    private Organization org;
+    private PharmacyOrganization pharmorg;
+    private Network network;
     private static Logger log = Logger.getLogger(PharmacyWorkAreaJPanel.class);
     private static final String CLASS_NAME = PharmacyWorkAreaJPanel.class.getName();
     
-    public PharmacyWorkAreaJPanel(JPanel userProcessContainer, User_account_class userAccount, Pharmacy_org_class organization, Enterprise_class enterprise, Network_class network) {
+    public PharmacyWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, PharmacyOrganization organization, Enterprise enterprise, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -262,7 +262,7 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
     private void btn_Add_medicineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Add_medicineActionPerformed
         // TODO add your handling code here:
         
-        Medical_Repository_Class m = new Medical_Repository_Class();
+        MedicalInventory m = new MedicalInventory();
         String name = txt_medicine_name.getText().trim();
         String error_message = "";
         String avail = txt_available_quantity.getText();
@@ -279,10 +279,10 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-        m.setMedicine_Name(txt_medicine_name.getText());
+        m.setMedicineName(txt_medicine_name.getText());
         try{
         int availableQuantity = Integer.parseInt(txt_available_quantity.getText());
-        m.setAvailable_Quantity(availableQuantity);
+        m.setAvailQuantity(availableQuantity);
         }
         catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "serial number must be integer!");
@@ -290,7 +290,7 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
         }
         try{
         int serialNumber = Integer.parseInt(txt_serial_num.getText());
-        m.setSerial_Number(serialNumber);
+        m.setSerialNumber(serialNumber);
         }
         catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "serial number must be integer!");
@@ -299,7 +299,7 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
         String req = txt_req_quantity.getText();
         try {
            
-            m.setRequired_Quantity(Integer.parseInt(req));
+            m.setRequiredQuantity(Integer.parseInt(req));
         } catch (NumberFormatException e) {
 
             JOptionPane.showMessageDialog(null, "Required quantity must be integer!");
@@ -317,18 +317,18 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
 //            return;
 //        }
         pharmorg.addMedicine(m);
-        m.setReorder_Status("N");
+        m.setReorderStatus("N");
 
         DefaultTableModel dtm = (DefaultTableModel) JTable_Pharmacy.getModel();
 
         dtm.setRowCount(0);
-        for (Medical_Repository_Class mi : pharmorg.getMedList()) {
+        for (MedicalInventory mi : pharmorg.getMedList()) {
             Object row[] = new Object[5];
             row[0] = mi;
-            row[1] = mi.getSerial_Number();
-            row[2] = mi.getAvailable_Quantity();
-            row[3] = mi.getRequired_Quantity();
-            row[4] = mi.getReorder_Status();
+            row[1] = mi.getSerialNumber();
+            row[2] = mi.getAvailQuantity();
+            row[3] = mi.getRequiredQuantity();
+            row[4] = mi.getReorderStatus();
             dtm.addRow(row);
         }
 
@@ -348,7 +348,7 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Pls select a row!!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Medical_Repository_Class mi = (Medical_Repository_Class) JTable_Pharmacy.getValueAt(row, 0);
+        MedicalInventory mi = (MedicalInventory) JTable_Pharmacy.getValueAt(row, 0);
 
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.add("UpdateEntryJPanel", new ViewPharmacyDetailsJPanel(userProcessContainer, userAccount, enterprise, mi));
@@ -359,7 +359,7 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
     private void btn_inventory_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_inventory_checkActionPerformed
         // TODO add your handling code here:
         int medicinecheck=0; 
-        for (Medical_Repository_Class mi : pharmorg.getMedList()) {
+        for (MedicalInventory mi : pharmorg.getMedList()) {
             medicinecheck++;
          }
          
@@ -368,26 +368,26 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null,"No medicines are present for invetory check  ");
             return;
         }
-        for (Medical_Repository_Class mi : pharmorg.getMedList()) {
+        for (MedicalInventory mi : pharmorg.getMedList()) {
 
-            if (mi.getAvailable_Quantity()<= mi.getRequired_Quantity()) {
-                if (!mi.getReorder_Status().equals("Y")) {
-                    Drug_class_workrequest request = new Drug_class_workrequest();
+            if (mi.getAvailQuantity()<= mi.getRequiredQuantity()) {
+                if (!mi.getReorderStatus().equals("Y")) {
+                    DrugWorkRequest request = new DrugWorkRequest();
                     
-                    mi.setReorder_Status("Y");
-                    request.setDrug_Name(mi.getMedicine_Name());
-                    request.setDrug_Quantity(mi.getRequired_Quantity());
+                    mi.setReorderStatus("Y");
+                    request.setDrugName(mi.getMedicineName());
+                    request.setQuantity(mi.getRequiredQuantity());
                     request.setSender(userAccount);
 
                     userAccount.getWorkQueue().getWorkRequestList().add(request);
-                    for (Enterprise_class enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-                        System.out.println("***** Organization Name:" + enterprise.getOrgName());
-                        for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-                            System.out.println("***** Organization Name:" + organization.getOrgName());
-                            if (organization.getOrgName().equals("Drug Organization")) {
+                    for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                        System.out.println("***** Organization Name:" + enterprise.getName());
+                        for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                            System.out.println("***** Organization Name:" + organization.getName());
+                            if (organization.getName().equals("Drug Organization")) {
                                 System.out.println("True");
 
-                                System.out.println("***** organization Name" + organization.getOrgName());
+                                System.out.println("***** organization Name" + organization.getName());
 
                                 organization.getWorkQueue().getWorkRequestList().add(request);
                                 log.debug(userAccount+" "+"sending request to Drug Organization");
@@ -431,13 +431,13 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
         for (int i = rowCount - 1; i >= 0; i--) {
             model.removeRow(i);
         }
-        for (Medical_Repository_Class mi : pharmorg.getMedList()) {
+        for (MedicalInventory mi : pharmorg.getMedList()) {
             Object row[] = new Object[6];
             row[0] = mi;
-            row[1] = mi.getSerial_Number();
-            row[2] = mi.getAvailable_Quantity();
-            row[3] = mi.getRequired_Quantity();
-            row[4] = mi.getReorder_Status();
+            row[1] = mi.getSerialNumber();
+            row[2] = mi.getAvailQuantity();
+            row[3] = mi.getRequiredQuantity();
+            row[4] = mi.getReorderStatus();
             //row[5] = mi.getReorderStatus();
             model.addRow(row);
         }
@@ -448,14 +448,14 @@ public class PharmacyWorkAreaJPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (Workrequest_class request : pharmorg.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : pharmorg.getWorkQueue().getWorkRequestList()) {
             System.out.println("entering medication");
            
-             if(request instanceof Pharmacy_class_workrequest){
+             if(request instanceof PharmacyWorkRequest){
             Object[] row = new Object[3];
-            row[0] = ((Pharmacy_class_workrequest) request).getPharmacy_medication_Name();
-            row[1] = ((Pharmacy_class_workrequest) request).getPharmacy_Quantity();
-            row[2] = ((Pharmacy_class_workrequest) request).getPharmacy_status();
+            row[0] = ((PharmacyWorkRequest) request).getMedicationName();
+            row[1] = ((PharmacyWorkRequest) request).getQuantity();
+            row[2] = ((PharmacyWorkRequest) request).getStatus();
 
             model.addRow(row);
              }

@@ -3,12 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package UI;
-import Business.EcoCommunity;
-import DB4O.DB40_Class;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.org_class;
-import User_account.User_account_class;
+import Business.EcoSystem;
+import Business.DB4OUtil.DB4OUtil;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,12 +31,12 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     private static Logger log = Logger.getLogger(MainJFrame.class);
     private static final String CLASS_NAME = MainJFrame.class.getName();
-    private EcoCommunity sysEcoCommunity;
-    private DB40_Class dB4OUtil = DB40_Class.getInstance();
+    private EcoSystem ecoSystem;
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     public MainJFrame() {
         initComponents();
-        initComponents();
-        sysEcoCommunity = dB4OUtil.retrieveSystem();
+        
+        ecoSystem = dB4OUtil.retrieveSystem();
         this.setSize(500, 500);
     }
 
@@ -52,11 +52,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         GUIDE = new javax.swing.JPanel();
         lbl_password = new javax.swing.JLabel();
-        txtUser_name = new javax.swing.JTextField();
         lbl_user_name = new javax.swing.JLabel();
         BTN_LOGIN = new javax.swing.JButton();
         BTN_LOGOUT = new javax.swing.JButton();
         txt_password = new javax.swing.JPasswordField();
+        txtUser_name = new javax.swing.JTextField();
         WORKAREA = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -67,8 +67,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
         lbl_password.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_password.setText("PASSWORD");
-
-        txtUser_name.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(102, 0, 255), null));
 
         lbl_user_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_user_name.setText("USER NAME");
@@ -95,17 +93,17 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(GUIDELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(GUIDELayout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addGroup(GUIDELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(GUIDELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_password, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUser_name, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                             .addComponent(lbl_user_name, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_password)))
+                            .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUser_name, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)))
                     .addGroup(GUIDELayout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addGroup(GUIDELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(BTN_LOGIN)
                             .addComponent(BTN_LOGOUT))))
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
         GUIDELayout.setVerticalGroup(
             GUIDELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,8 +111,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGap(98, 98, 98)
                 .addComponent(lbl_user_name, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUser_name, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(txtUser_name, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addComponent(lbl_password, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,17 +125,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(GUIDE);
 
-        javax.swing.GroupLayout WORKAREALayout = new javax.swing.GroupLayout(WORKAREA);
-        WORKAREA.setLayout(WORKAREALayout);
-        WORKAREALayout.setHorizontalGroup(
-            WORKAREALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1020, Short.MAX_VALUE)
-        );
-        WORKAREALayout.setVerticalGroup(
-            WORKAREALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
-        );
-
+        WORKAREA.setLayout(new java.awt.CardLayout());
         jSplitPane1.setRightComponent(WORKAREA);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,39 +159,41 @@ public class MainJFrame extends javax.swing.JFrame {
         WORKAREA.add("blank", blankJP);
         CardLayout crdLyt = (CardLayout) WORKAREA.getLayout();
         crdLyt.next(WORKAREA);
-        dB4OUtil.storeSystem(sysEcoCommunity);
+        dB4OUtil.storeSystem(ecoSystem);
     }//GEN-LAST:event_BTN_LOGOUTActionPerformed
 
     private void BTN_LOGINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_LOGINActionPerformed
         // TODO add your handling code here:
-          String userName = txtUser_name.getText();
+        String userName = txtUser_name.getText();
 
         char[] passwordCharArray = txt_password.getPassword();
         String password = String.valueOf(passwordCharArray);
+        
+        
 
         //Step1: Check in the system admin user account directory if you have the user
-        User_account_class userAccount=sysEcoCommunity.getUserAccountDirectory().authenticateUser(userName, password);
+        UserAccount User_account_class=ecoSystem.getUserAccountDirectory().authenticateUser(userName, password);
 
-        Enterprise_class inEnterprise=null;
-        org_class inOrganization=null;
-        Network_class inNetwork=null;
+        Enterprise inEnterprise=null;
+        Organization inOrganization=null;
+        Network inNetwork=null;
 
-        if(userAccount==null){
+        if(User_account_class==null){
             //Step 2: Go inside each network and check each enterprise
-            for(Network_class network:sysEcoCommunity.getNetwork_List()){
+            for(Network network:ecoSystem.getNetworkList()){
                 //Step 2.a: check against each enterprise
-                for(Enterprise_class enterprise:network.getEnterpriseDirectory().getEnterpriseList()){
-                    userAccount=enterprise.getUserAccountDirectory().authenticateUser(userName, password);
-                    if(userAccount==null){
+                for(Enterprise enterprise:network.getEnterpriseDirectory().getEnterpriseList()){
+                    User_account_class=enterprise.getUserAccountDirectory().authenticateUser(userName, password);
+                    if(User_account_class==null){
                         //Step 3:check against each organization for each enterprise
-                        for(org_class organization:enterprise.getOrg_Diectory().getOrgList()){
-                            userAccount=organization.getUserAccountDirectory().authenticateUser(userName, password);
-                            if(userAccount!=null){
+                        for(Organization org_class:enterprise.getOrganizationDirectory().getOrganizationList()){
+                            User_account_class=org_class.getUserAccountDirectory().authenticateUser(userName, password);
+                            if(User_account_class!=null){
                                 inEnterprise=enterprise;
-                                inOrganization=organization;
+                                inOrganization=org_class;
                                 inNetwork = network;
                                 log.debug("Current Enterprise\t" +enterprise);
-                                log.debug("Current Organization\t" +organization);
+                                log.debug("Current Organization\t" +org_class);
                                 log.debug("Current Network\t" +network);
                                 break;
                             }
@@ -224,15 +214,15 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         }
 
-        if(userAccount==null){
+        if(User_account_class==null){
             log.error("Invalid credentials for user");
             JOptionPane.showMessageDialog(null, "Invalid credentials");
             return;
         }
         else{
             CardLayout layout=(CardLayout)WORKAREA.getLayout();
-            log.debug("Logged in User Role" +userAccount.getRole());
-            WORKAREA.add("workArea",userAccount.getRole().createWorkArea(WORKAREA, userAccount, inOrganization, inEnterprise, sysEcoCommunity,inNetwork));
+            log.debug("Logged in User Role" +User_account_class.getRole());
+            WORKAREA.add("workArea",User_account_class.getRole().createWorkArea(WORKAREA, User_account_class, inOrganization, inEnterprise, ecoSystem,inNetwork));
             layout.next(WORKAREA);
         }
 
@@ -268,9 +258,10 @@ public class MainJFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+ log.debug("Entering Main JFrame\t" +CLASS_NAME);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+             @Override
             public void run() {
                 new MainJFrame().setVisible(true);
             }

@@ -8,7 +8,7 @@ package UI.DOCTORROLE;
  *
  * @author dsnik
  */
-import WorkQueue.lab_class_workrequest;
+import Business.WorkQueue.LabTestWorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
@@ -21,14 +21,14 @@ public class Clinical_Trial_JPanel extends javax.swing.JPanel {
      * Creates new form Clinical_Trial_JPanel
      */
     private JPanel userProcessContainer;
-    private lab_class_workrequest request;
+    private LabTestWorkRequest request;
     private static Logger log = Logger.getLogger(Clinical_Trial_JPanel.class);
     private static final String CLASS_NAME = Clinical_Trial_JPanel.class.getName();
-    public Clinical_Trial_JPanel(JPanel userProcessContainer, lab_class_workrequest request) {
+    public Clinical_Trial_JPanel(JPanel userProcessContainer, LabTestWorkRequest request) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.request = request;
-        TXT_PTN_NAME.setText(request.getPatient_Name());
+        TXT_PTN_NAME.setText(request.getPatientName());
     }
 
     /**
@@ -126,8 +126,8 @@ public class Clinical_Trial_JPanel extends javax.swing.JPanel {
       
         if((clinicalStatus == "") || (!clinicalStatus.equalsIgnoreCase("--Please select--"))){
             
-            request.getPatient().setClinical_Status(clinicalStatus);
-            log.debug("updated patient status to"+" "+request.getPatient().getClinical_Status());
+             request.getPatient().setClinicalStatus(clinicalStatus);
+            log.debug("updated patient status to"+" "+request.getPatient().getClinicalStatus());
             JOptionPane.showMessageDialog(null, "Status has been updated successfully");
     }
         

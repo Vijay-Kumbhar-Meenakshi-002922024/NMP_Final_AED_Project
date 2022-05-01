@@ -7,15 +7,16 @@ package UI.DOCTORROLE;
 /**
  *
  * @author dsnik
- */import Doctor.Physician_class;
-import Doctor.Prescription_List;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.Doctor_org_class;
-import User_account.User_account_class;
-import WorkQueue.Doctor_class_workrequest;
-import WorkQueue.Workrequest_class;
+ */
+import Business.Doctor.Physician;
+import Business.Doctor.PrescriptionList;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DoctorOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.DoctorWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -25,26 +26,29 @@ public class DOCTOR_WORK_AREA_JPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form DOCTOR_WORK_AREA_JPanel
-     */private JPanel userProcessContainer;
-    private Doctor_org_class doctor_org_class;
-    private Enterprise_class enterprise_class;
-    private User_account_class user_account_class;
-    private Physician_class physician_class;
-    private Prescription_List prescription_List;
-    private Doctor_class_workrequest doctor_class_workrequest;
-    private Network_class network_class;
-    private EcoCommunity ecoCommunity;
+     */ private JPanel userProcessContainer;
+    private DoctorOrganization organization;
+    private Enterprise enterprise;
+    private UserAccount userAccount;
+    private Physician physician;
+    private PrescriptionList list;
+    private DoctorWorkRequest docreq;
+    private Network network;
+    private EcoSystem system;
     private static Logger log = Logger.getLogger(DOCTOR_WORK_AREA_JPanel.class);
     private static final String CLASS_NAME = DOCTOR_WORK_AREA_JPanel.class.getName();
-    
-    public DOCTOR_WORK_AREA_JPanel(JPanel userProcessContainer, User_account_class user_account_class, Doctor_org_class doctor_org_class, Enterprise_class enterprise_class, EcoCommunity ecoCommunity, Network_class network_class) {
+
+    /**
+     * Creates new form DoctorWorkAreaJPanel
+     */
+    public DOCTOR_WORK_AREA_JPanel(JPanel userProcessContainer, UserAccount account, DoctorOrganization organization, Enterprise enterprise, EcoSystem system, Network network) {
         initComponents();
-         this.userProcessContainer = userProcessContainer;
-        this.user_account_class = user_account_class;
-        this.doctor_org_class = doctor_org_class;
-        this.enterprise_class = enterprise_class;
-        this.network_class = network_class;
-        this.ecoCommunity = ecoCommunity;
+        this.userProcessContainer = userProcessContainer;
+        this.userAccount = account;
+        this.organization = organization;
+        this.enterprise = enterprise;
+        this.network = network;
+        this.system = system;
         network();
     }
 
@@ -111,8 +115,8 @@ public class DOCTOR_WORK_AREA_JPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
          CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         log.debug("inside doctor's lab request");
-        userProcessContainer.add("TestJPanel", new UI.DOCTORROLE.REQUEST_LAB_TEST_JPanel(userProcessContainer, user_account_class, doctor_org_class, enterprise_class, ecoCommunity, network_class));
-
+          userProcessContainer.add("PrescriptionJPanel", new UI.DOCTORROLE.WRITE_PRESCRIPTION_JPanel(userProcessContainer,list,userAccount,enterprise,organization,system,network));
+      
         layout.next(userProcessContainer);
     }//GEN-LAST:event_BTN_LAB_TESTActionPerformed
 
@@ -120,8 +124,8 @@ public class DOCTOR_WORK_AREA_JPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
           log.debug("inside doctor role");
-          userProcessContainer.add("PrescriptionJPanel", new UI.DOCTORROLE.WRITE_PRESCRIPTION_JPanel(userProcessContainer,list,userAccount,enterprise,organization,system,network));
-       //  userProcessContainer.add("PrescriptionJPanel", new userinterface.DoctorRole.PrescriptionJPanel(userProcessContainer, userAccount, enterprise));
+       userProcessContainer.add("TestJPanel", new UI.DOCTORROLE.Request_from_Doctor_JPanel(userProcessContainer, userAccount, organization, enterprise, system, network));
+ //  userProcessContainer.add("PrescriptionJPanel", new userinterface.DoctorRole.PrescriptionJPanel(userProcessContainer, userAccount, enterprise));
          layout.next(userProcessContainer);
     }//GEN-LAST:event_BTN_WRITE_PRESCRIPTIONActionPerformed
 
@@ -133,6 +137,6 @@ public class DOCTOR_WORK_AREA_JPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void network() {
-    network_class.getName();
+    network.getName();
     }
 }

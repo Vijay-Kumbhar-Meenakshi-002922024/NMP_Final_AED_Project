@@ -9,16 +9,17 @@ package UI.LAB_ASSISTANT_ROLE;
  * @author dsnik
  */
 
-import Doctor.Patient_class;
-import Enterprise.Enterprise_class;
-import Genetics.Genetic_class;
-import Network.Network_class;
-import Organization.Lab_org_class;
-import Organization.org_class;
-import User_account.User_account_class;
-import WorkQueue.Drug_class_workrequest;
-import WorkQueue.lab_class_workrequest;
-import WorkQueue.Workrequest_class;
+
+import Business.Doctor.Patient;
+import Business.Enterprise.Enterprise;
+import Business.Gene.Gene;
+import Business.Network.Network;
+import Business.Organization.LabOrganization;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.DrugWorkRequest;
+import Business.WorkQueue.LabTestWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.io.BufferedWriter;
@@ -39,23 +40,23 @@ public class LabProcessRequestJPanel extends javax.swing.JPanel {
      * Creates new form LabProcessRequestJPanel
      */
     private JPanel userProcessContainer;
-    private lab_class_workrequest request;
-    private Lab_org_class labOrganization;
-    private User_account_class userAccount;
-    private Network_class network;
+    private LabTestWorkRequest request;
+    private LabOrganization labOrganization;
+    private UserAccount userAccount;
+    private Network network;
     String filePath = "./genes data.txt";
     private static Logger log = Logger.getLogger(LabProcessRequestJPanel.class);
     private static final String CLASS_NAME = LabProcessRequestJPanel.class.getName();
 
     
-     public LabProcessRequestJPanel(JPanel userProcessContainer, lab_class_workrequest request, org_class organization, User_account_class userAccount, Network_class network) {
+     public LabProcessRequestJPanel(JPanel userProcessContainer, LabTestWorkRequest request, Organization organization, UserAccount userAccount, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.request = request;
         this.userAccount = userAccount;
         this.network = network;
-        this.labOrganization = (Lab_org_class) organization;
-        TXT_NAME.setText(request.getPatient_Name());
+        this.labOrganization = (LabOrganization) organization;
+        TXT_NAME.setText(request.getPatientName());
         populateTable();
         System.out.println(request.getStatus());
 
@@ -206,8 +207,8 @@ public class LabProcessRequestJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
          BTN_SUBMIT.setEnabled(true);
         ArrayList<String> genecheck = new ArrayList<>();
-        for (Genetic_class g : ((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History()) {
-            genecheck.add(g.getGene_Name());
+        for (Gene g : ((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory()) {
+            genecheck.add(g.getGeneName());
 
         }
         if (genecheck.size() <= 0) {
@@ -215,21 +216,21 @@ public class LabProcessRequestJPanel extends javax.swing.JPanel {
             return;
         }
         request.setStatus("Completed");
-        Drug_class_workrequest requestDrug = new Drug_class_workrequest();
+        DrugWorkRequest requestDrug = new DrugWorkRequest();
 
-        requestDrug.setPatient(((lab_class_workrequest) request).getPatient());
+        requestDrug.setPatient(((LabTestWorkRequest) request).getPatient());
 
         requestDrug.setSender(userAccount);
 
         userAccount.getWorkQueue().getWorkRequestList().add(requestDrug);
-        for (Enterprise_class enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-            System.out.println("***** Organization Name:" + enterprise.getOrgName());
-            for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-                System.out.println("***** Organization Name:" + organization.getOrgName());
-                if (organization.getOrgName().equals("Drug Organization")) {
+        for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+            System.out.println("***** Organization Name:" + enterprise.getName());
+            for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                System.out.println("***** Organization Name:" + organization.getName());
+                if (organization.getName().equals("Drug Organization")) {
                     System.out.println("True");
 
-                    System.out.println("***** organization Name" + organization.getOrgName());
+                    System.out.println("***** organization Name" + organization.getName());
 
                     organization.getWorkQueue().getWorkRequestList().add(requestDrug);
                 }
@@ -244,7 +245,7 @@ public class LabProcessRequestJPanel extends javax.swing.JPanel {
     private void BTN_ADD_GENEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_ADD_GENEActionPerformed
         // TODO add your handling code here:
         
-         Patient_class patient = ((lab_class_workrequest) request).getPatient();
+         Patient patient = ((LabTestWorkRequest) request).getPatient();
         String geneName = txt_gene.getText().trim();
         if (geneName.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please add a gene");
@@ -252,19 +253,19 @@ public class LabProcessRequestJPanel extends javax.swing.JPanel {
         }
 
         ArrayList<String> genecheck = new ArrayList<>();
-        for (Genetic_class g1 : patient.getGene_History().getGenetics_History()) {
-            genecheck.add(g1.getGene_Name().toLowerCase());
+        for (Gene g1 : patient.getGeneHistory().getGeneHistory()) {
+            genecheck.add(g1.getGeneName().toLowerCase());
 
         }
         if (genecheck.contains(geneName.toLowerCase())) {
             JOptionPane.showMessageDialog(null, "Gene already exists in the list ");
             return;
         }
-        Genetic_class g = patient.getGene_History().getGenetics_History();
-        g.getGene_Name(geneName);
+        Gene g = patient.getGeneHistory().addGeneList();
+        g.setGeneName(geneName);
         request.setPatient(patient);
         populateTable();
-        saveRecord(g.getGene_Name());
+        saveRecord(g.getGeneName());
         txt_gene.setText("");
     }//GEN-LAST:event_BTN_ADD_GENEActionPerformed
 public void saveRecord(String gene) {
@@ -298,15 +299,15 @@ public void saveRecord(String gene) {
     DefaultTableModel model = (DefaultTableModel) JTable_lab_test.getModel();
 
         model.setRowCount(0);
-        System.out.println(((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History());
-        System.out.println(((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History().size());
+        System.out.println(((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory());
+        System.out.println(((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory().size());
 
-        for (Genetic_class g : ((lab_class_workrequest) request).getPatient().getGene_History().getGenetics_History()) {
+        for (Gene g : ((LabTestWorkRequest) request).getPatient().getGeneHistory().getGeneHistory()) {
 
             Object[] row = new Object[2];
-            row[0] = g.getGene_id();
-            row[1] = g.getGene_Name();
-            System.out.println(((lab_class_workrequest) request).getPatient());
+            row[0] = g.getId();
+            row[1] = g.getGeneName();
+            System.out.println(((LabTestWorkRequest) request).getPatient());
 
             model.addRow(row);
         }

@@ -8,19 +8,19 @@ package UI.DOCTORROLE;
  *
  * @author dsnik
  */
-import Doctor.Prescription_Class;
-import Doctor.Prescription_List;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.Doctor_org_class;
+import Business.Doctor.Prescription;
+import Business.Doctor.PrescriptionList;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DoctorOrganization;
 
-import Organization.org_class;
-import Organization.Pharmacy_org_class;
-import User_account.User_account_class;
-import WorkQueue.Drug_class_workrequest;
-import WorkQueue.Pharmacy_class_workrequest;
-import WorkQueue.Workrequest_class;
+import Business.Organization.Organization;
+import Business.Organization.PharmacyOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.DoctorWorkRequest;
+import Business.WorkQueue.PharmacyWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,19 +38,20 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
     /**
      * Creates new form WRITE_PRESCRIPTION_JPanel
      */
-      private Prescription_List prescriptionList;
-    private Doctor_org_class organization;
-    private Enterprise_class enterprise;
-    private User_account_class userAccount;
+     private PrescriptionList prescriptionList;
+    private DoctorOrganization organization;
+    private Enterprise enterprise;
+    private UserAccount userAccount;
     private JPanel userProcessContainer;
-    private Prescription_List prescription;
-    private Doctor_org_class docreq;
-    private Network_class network;
-    private EcoCommunity system;
+    private Prescription prescription;
+    private DoctorWorkRequest docreq;
+    private Network network;
+    private EcoSystem system;
     private static Logger log = Logger.getLogger(WRITE_PRESCRIPTION_JPanel.class);
     private static final String CLASS_NAME = WRITE_PRESCRIPTION_JPanel.class.getName();
     private static final String filePath = "./prescription data.txt";
-    public WRITE_PRESCRIPTION_JPanel(JPanel userProcessContainer, Prescription_List List, User_account_class account, Enterprise_class enterprise, Doctor_org_class organization, EcoCommunity system, Network_class network) {
+
+    public WRITE_PRESCRIPTION_JPanel(JPanel userProcessContainer, PrescriptionList List, UserAccount account, Enterprise enterprise, DoctorOrganization organization, EcoSystem system, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
@@ -60,7 +61,10 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
         this.system = system;
         
         populateWorkRequestTable();
-        DateChooser.setMinSelectableDate(new Date());
+        
+       
+        
+      /*  DateChooser.setMinSelectableDate(new Date());*/
     }
 
     /**
@@ -79,7 +83,6 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
         TXT_NAME = new javax.swing.JTextField();
         TXT_AGE = new javax.swing.JTextField();
         jComboBox_GENDER = new javax.swing.JComboBox<>();
-        LBL_DATE = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox_DIAGNOSIS = new javax.swing.JComboBox<>();
@@ -114,17 +117,20 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
             }
         });
 
-        jComboBox_GENDER.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        LBL_DATE.setText("DATE ");
+        jComboBox_GENDER.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Please select--", "Male", "Female" }));
 
         jLabel2.setText("DIAGNOSIS");
 
         jLabel3.setText("MEDICATION");
 
-        jComboBox_DIAGNOSIS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_DIAGNOSIS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Please select--", "Achondroplasia", "Marfansyndrome", "Cysticfibrosis", "TaySachs", "Haemophilia", "Mosaicism", "Downsyndrome", "Turnersyndrome" }));
+        jComboBox_DIAGNOSIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_DIAGNOSISActionPerformed(evt);
+            }
+        });
 
-        jComboBox_MEDICATION.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_MEDICATION.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Please select--", "Galafold", "Onpattro", "Revcovi", "Tegsedi", "Haegarda", "Brineura", "Mepsevii", "Spinraza" }));
         jComboBox_MEDICATION.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox_MEDICATIONActionPerformed(evt);
@@ -201,9 +207,7 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
                                                 .addGroup(layout.createSequentialGroup()
                                                     .addGap(39, 39, 39)
                                                     .addComponent(LBL_AGE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(LBL_DATE)
-                                                    .addComponent(jLabel3))))
+                                                .addComponent(jLabel3)))
                                         .addComponent(jComboBox_GENDER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(TXT_NAME, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(28, 28, 28)
@@ -215,7 +219,7 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
                                 .addComponent(BTN_BACK)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 795, Short.MAX_VALUE))))
+                        .addGap(0, 762, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(255, 255, 255)
                 .addComponent(BTN_PRESCRIPTION)
@@ -233,11 +237,9 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
                     .addComponent(LBL_AGE)
                     .addComponent(TXT_AGE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(LBL_GENDER)
-                        .addComponent(jComboBox_GENDER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(LBL_DATE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LBL_GENDER)
+                    .addComponent(jComboBox_GENDER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -293,14 +295,14 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
     }
     private void BTN_PRESCRIPTIONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_PRESCRIPTIONActionPerformed
         // TODO add your handling code here:
-        Prescription_Class p = new Prescription_Class();
+       Prescription p = new Prescription();
         p.setDaignosis(jComboBox_DIAGNOSIS.getSelectedItem().toString());
-        p.setMedicine_Name(jComboBox_MEDICATION.getSelectedItem().toString());
+        p.setMedicineName(jComboBox_MEDICATION.getSelectedItem().toString());
 
-        p.setNo_of_Times_In_a_day((Integer) jSpinner_TIMES_DAY.getValue());
+        p.setNoofTimesInaday((Integer) jSpinner_TIMES_DAY.getValue());
 
-        p.setTotal_Days((Integer) jSpinner_FOR.getValue());
-        p.setNetwork_Name(network.getName());
+        p.setTotalDays((Integer) jSpinner_FOR.getValue());
+        p.setNetworkName(network.getName());
         
         
         
@@ -330,12 +332,7 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
              flag = false;
              return;
                 }
-         if(DateChooser.getDate()==null)
-         {
-             JOptionPane.showMessageDialog(null, "Please select the date !");
-             flag = false;
-             return;
-         }
+         
          if(jComboBox_MEDICATION.getSelectedIndex()<=0)
          {
              JOptionPane.showMessageDialog(null, "Please select the Medication Name !");
@@ -359,21 +356,21 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
             
             organization.addPrescription(p);
 
-            Pharmacy_class_workrequest request = new Pharmacy_class_workrequest();
+            PharmacyWorkRequest request = new PharmacyWorkRequest();
 
-            request.setPharmacy_medication_Name(jComboBox_MEDICATION.getSelectedItem().toString());
-            request.setPharmacy_Quantity(((Integer) jSpinner_TIMES_DAY.getValue()) * ((Integer) jSpinner_TIMES_DAY.getValue()));
-            request.setPharmacy_supplier_Name(userAccount);
-            request.setPharmacy_status("Sent");
-            System.out.println(request.getPharmacy_medication_Name());
+            request.setMedicationName(jComboBox_MEDICATION.getSelectedItem().toString());
+            request.setQuantity(((Integer) jSpinner_TIMES_DAY.getValue()) * ((Integer) jSpinner_TIMES_DAY.getValue()));
+           /* request.setPharmacy_supplier_Name(userAccount); */
+            request.setStatus("Sent");
+            System.out.println(request.getMedicationName());
             JOptionPane.showMessageDialog(null, "Prescription added successfully");
 
             System.out.println("****" + enterprise.getName());
-            org_class org = null;
+            Organization org = null;
 
-                for (Enterprise_class enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-                    for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-                        if (organization instanceof Pharmacy_org_class) {
+                for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                    for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                        if (organization instanceof PharmacyOrganization) {
                             org = organization;
                             System.out.println("****" + org);
                             log.debug(org);
@@ -395,7 +392,7 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
            
 
             populateWorkRequestTable();
-            saveRecord(p.getNetwork_Name(),p.getDaignosis(),p.getMedicine_Name());
+            saveRecord(p.getNetworkName(),p.getDaignosis(),p.getMedicineName());
             TXT_NAME.setText("");
             TXT_AGE.setText("");
              jSpinner_TIMES_DAY.setValue(0);
@@ -415,12 +412,15 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_BTN_BACKActionPerformed
 
+    private void jComboBox_DIAGNOSISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_DIAGNOSISActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_DIAGNOSISActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTN_BACK;
     private javax.swing.JButton BTN_PRESCRIPTION;
     private javax.swing.JLabel LBL_AGE;
-    private javax.swing.JLabel LBL_DATE;
     private javax.swing.JLabel LBL_FOR;
     private javax.swing.JLabel LBL_GENDER;
     private javax.swing.JLabel LBL_NAME;
@@ -444,18 +444,18 @@ public class WRITE_PRESCRIPTION_JPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (Workrequest_class request : userAccount.getWorkQueue().getWorkRequestList()) {
-            if (request instanceof Pharmacy_class_workrequest) {
+        for (WorkRequest request : userAccount.getWorkQueue().getWorkRequestList()) {
+            if (request instanceof PharmacyWorkRequest) {
                 Object[] row = new Object[4];
 
-                String medication = ((Pharmacy_class_workrequest) request).getPharmacy_medication_Name();
+                String medication = ((PharmacyWorkRequest) request).getMedicationName();
 
                 System.out.println("****" + medication);
-                row[0] = (Pharmacy_class_workrequest) request;
-                int quantity = ((Pharmacy_class_workrequest) request).getPharmacy_Quantity();
+                row[0] = (PharmacyWorkRequest) request;
+                int quantity = ((PharmacyWorkRequest) request).getQuantity();
                 row[1] = quantity;
-                row[2] = ((Pharmacy_class_workrequest) request).getPharmacy_supplier_Name();
-                String result = ((Pharmacy_class_workrequest) request).getPharmacy_status();
+                row[2] = ((PharmacyWorkRequest) request).getSender();
+                String result = ((PharmacyWorkRequest) request).getStatus();
                 row[3] = result == null ? "Waiting" : result;
 
                 model.addRow(row);

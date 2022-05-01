@@ -8,11 +8,11 @@ package UI.AdminRole;
  *
  * @author dsnik
  */
-import EmployeeData.Employee;
-import Enterprise.Enterprise_class;
-import Organization.org_class;
-import Role.Role_class;
-import User_account.User_account_class;
+import Business.Employee.Employee;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Role.Role;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -21,13 +21,13 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 public class Manage_UserAccountJPanel extends javax.swing.JPanel {
  private JPanel container;
-    private Enterprise_class enterprise;
+    private Enterprise enterprise;
     private static Logger log = Logger.getLogger(Manage_UserAccountJPanel.class);
     private static final String CLASS_NAME = Manage_UserAccountJPanel.class.getName();
     /**
      * Creates new form Manage_UserAccountJPanel
      */
-    public Manage_UserAccountJPanel(JPanel container, Enterprise_class enterprise_class) {
+    public Manage_UserAccountJPanel(JPanel container, Enterprise enterprise) {
         initComponents();
         this.container = container;
         this.enterprise = enterprise;
@@ -48,17 +48,17 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         LBL_ORG = new javax.swing.JLabel();
-        jComboBox_ORG = new javax.swing.JComboBox<>();
         LBL_EMP = new javax.swing.JLabel();
-        jComboBox_EMP = new javax.swing.JComboBox<>();
         LBL_ROLE = new javax.swing.JLabel();
-        jComboBox_ROLE = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         LBL_PASSWORD = new javax.swing.JLabel();
         TXT_USER_NAME = new javax.swing.JTextField();
         TXT_PASSWORD = new javax.swing.JTextField();
         BTN_BACK_MANG_USER_aCC = new javax.swing.JButton();
         BTN_CREATE_USER_aCC = new javax.swing.JButton();
+        Jcombobox_Org = new javax.swing.JComboBox();
+        JComboBox_Emp = new javax.swing.JComboBox();
+        JComboBox_role = new javax.swing.JComboBox();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("MANAGE USER ACCOUNT");
@@ -83,30 +83,9 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
 
         LBL_ORG.setText("ORGANIZATION");
 
-        jComboBox_ORG.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox_ORG.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_ORGActionPerformed(evt);
-            }
-        });
-
         LBL_EMP.setText("EMPLOYEEE");
 
-        jComboBox_EMP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox_EMP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_EMPActionPerformed(evt);
-            }
-        });
-
         LBL_ROLE.setText("ROLE");
-
-        jComboBox_ROLE.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox_ROLE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_ROLEActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("USER NAME");
 
@@ -138,6 +117,20 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
             }
         });
 
+        Jcombobox_Org.setFont(new java.awt.Font("Microsoft JhengHei UI Light", 0, 20)); // NOI18N
+        Jcombobox_Org.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Jcombobox_Org.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Jcombobox_OrgActionPerformed(evt);
+            }
+        });
+
+        JComboBox_Emp.setFont(new java.awt.Font("Microsoft JhengHei UI Light", 0, 20)); // NOI18N
+        JComboBox_Emp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        JComboBox_role.setFont(new java.awt.Font("Microsoft JhengHei UI Light", 0, 20)); // NOI18N
+        JComboBox_role.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,25 +144,25 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
                         .addGap(90, 90, 90)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(71, 71, 71)
-                                .addComponent(LBL_ROLE)
-                                .addGap(62, 62, 62)
-                                .addComponent(jComboBox_ROLE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(41, 41, 41)
-                                .addComponent(LBL_EMP))
+                        .addGap(71, 71, 71)
+                        .addComponent(LBL_ROLE)
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(89, 89, 89)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(LBL_PASSWORD))
                                 .addGap(52, 52, 52)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(TXT_PASSWORD, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TXT_USER_NAME, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(52, 52, 52)
-                        .addComponent(jComboBox_EMP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TXT_USER_NAME, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(JComboBox_role, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(LBL_EMP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(JComboBox_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(BTN_BACK_MANG_USER_aCC)
@@ -177,12 +170,10 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
                         .addComponent(BTN_CREATE_USER_aCC))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LBL_ORG)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(133, 133, 133)
-                                .addComponent(jComboBox_ORG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addComponent(LBL_ORG)
+                        .addGap(28, 28, 28)
+                        .addComponent(Jcombobox_Org, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,16 +183,16 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LBL_ORG)
-                    .addComponent(jComboBox_ORG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                    .addComponent(Jcombobox_Org, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LBL_EMP)
-                    .addComponent(jComboBox_EMP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LBL_ROLE)
-                    .addComponent(jComboBox_ROLE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                    .addComponent(JComboBox_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JComboBox_role, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(TXT_USER_NAME, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -213,17 +204,9 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BTN_BACK_MANG_USER_aCC)
                     .addComponent(BTN_CREATE_USER_aCC))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jComboBox_EMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_EMPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_EMPActionPerformed
-
-    private void jComboBox_ROLEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_ROLEActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_ROLEActionPerformed
 
     private void TXT_USER_NAMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXT_USER_NAMEActionPerformed
         // TODO add your handling code here:
@@ -237,13 +220,13 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
           String userName = TXT_USER_NAME.getText().trim();
         String password = TXT_PASSWORD.getText();
-        org_class organization = (org_class) jComboBox_ORG.getSelectedItem();
-        Employee employee = (Employee) jComboBox_EMP.getSelectedItem();
-        Role_class role = (Role_class) jComboBox_ROLE.getSelectedItem();
+        Organization organization = (Organization) Jcombobox_Org.getSelectedItem();
+        Employee employee = (Employee) JComboBox_Emp.getSelectedItem();
+        Role role = (Role) JComboBox_role.getSelectedItem();
         ArrayList<String>usernamecheck = new ArrayList<>();
-        for(User_account_class e: organization.getUserAccountDirectory().getUserAccountList())
+        for(UserAccount e: organization.getUserAccountDirectory().getUserAccountList())
         {
-            usernamecheck.add(e.getUser_Name());
+            usernamecheck.add(e.getUsername());
             
         }
         if(usernamecheck.contains(userName))
@@ -271,68 +254,72 @@ public class Manage_UserAccountJPanel extends javax.swing.JPanel {
         layout.previous(container);
     }//GEN-LAST:event_BTN_BACK_MANG_USER_aCCActionPerformed
 
-    private void jComboBox_ORGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_ORGActionPerformed
+    private void Jcombobox_OrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Jcombobox_OrgActionPerformed
         // TODO add your handling code here:
-         org_class organization = (org_class) jComboBox_ORG.getSelectedItem();
+        Organization organization = (Organization) Jcombobox_Org.getSelectedItem();
         if (organization != null){
             populateEmployeeComboBox(organization);
             populateRoleComboBox(organization);
-    }//GEN-LAST:event_jComboBox_ORGActionPerformed
+        }
+    }//GEN-LAST:event_Jcombobox_OrgActionPerformed
+
+ 
+
+    private void populateOrganizationComboBox() {
+      Jcombobox_Org.removeAllItems();
+
+        for (Organization org_class : enterprise.getOrganizationDirectory().getOrganizationList()) {
+            Jcombobox_Org.addItem(org_class);
+       }
     }
+   
+        
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTN_BACK_MANG_USER_aCC;
     private javax.swing.JButton BTN_CREATE_USER_aCC;
+    private javax.swing.JComboBox JComboBox_Emp;
+    private javax.swing.JComboBox JComboBox_role;
+    private javax.swing.JComboBox Jcombobox_Org;
     private javax.swing.JLabel LBL_EMP;
     private javax.swing.JLabel LBL_ORG;
     private javax.swing.JLabel LBL_PASSWORD;
     private javax.swing.JLabel LBL_ROLE;
     private javax.swing.JTextField TXT_PASSWORD;
     private javax.swing.JTextField TXT_USER_NAME;
-    private javax.swing.JComboBox<String> jComboBox_EMP;
-    private javax.swing.JComboBox<String> jComboBox_ORG;
-    private javax.swing.JComboBox<String> jComboBox_ROLE;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
+    private void populateEmployeeComboBox(Organization organization) {
+    JComboBox_Emp.removeAllItems();
+        
+        for (Employee employee : organization.getEmployeeDirectory().getEmployeeList()){
+            JComboBox_Emp.addItem(employee);
+        } }
+
+    private void populateRoleComboBox(Organization organization) {
+      JComboBox_role.removeAllItems();
+        for (Role role : organization.getSupportedRole()){
+            JComboBox_role.addItem(role);
+        }  
+
+    } 
+
     private void populateData() {
-     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         model.setRowCount(0);
 
-        for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-            for (User_account_class ua : organization.getUserAccountDirectory().getUserAccountList()) {
+        for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+            for (UserAccount ua : organization.getUserAccountDirectory().getUserAccountList()) {
                 Object row[] = new Object[2];
                 row[0] = ua;
                 row[1] = ua.getRole();
                 ((DefaultTableModel) jTable1.getModel()).addRow(row);
             }
-        }
-    }
-
-    private void populateOrganizationComboBox() {
-    jComboBox_ORG.removeAllItems();
-
-        for (org_class organization : enterprise.getOrg_Diectory().getOrgList()) {
-            jComboBox_ORG.addItem(organization);
-        }
-    }
-        
-private void populateRoleComboBox(org_class organization){
-        jComboBox_ROLE.removeAllItems();
-        for (Role_class role_class : organization.getSupportedRole()){
-            jComboBox_ROLE.addItem(role_class);
-        }
-    }
-
-public void populateEmployeeComboBox(org_class organization){
-        jComboBox_EMP.removeAllItems();
-        
-        for (Employee employee : organization.getEmployeeDirectory().getEmpList()){
-            jComboBox_EMP.addItem(employee);
-        }
-    }
+        } }
 }
