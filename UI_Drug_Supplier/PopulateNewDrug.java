@@ -4,17 +4,41 @@
  */
 package UI_Drug_Supplier;
 
-/**
- *
- * @author dpsmv
- */
-public class PopulateNewDrug extends javax.swing.JPanel {
+
+    
+    private JPanel userProcessContainer;
+    private Patient_class patient;
+    private drug_org_class drugOrganization;
+    private User_account_class userAccount;
+    private Network_class network;
+    private EcoCommunity business;
+    private static Logger log = Logger.getLogger(PopulateNewDrug.class);
+    private static final String CLASS_NAME = PopulateNewDrug.class.getName();
+    
+    /**
+     * Creates new form PopulateNewDrug
+     */
+    public PopulateNewDrug(JPanel userProcessContainer, Patient_class patient, 
+            drug_org_class drugOrganization, User_account_class userAccount, Network_class network,
+            EcoCommunity business) {
+    
+        initComponents();
+        
+        this.userProcessContainer = userProcessContainer;
+        this.patient = patient;
+        this.drugOrganization = drugOrganization;
+        this.userAccount = userAccount;
+        this.network = network;
+        this.business = business;
+        txtPatientName.setText(patient.getPatient_Name());
+        populateTable();
+        
 
     /**
      * Creates new form PopulateNewDrug
      */
     public PopulateNewDrug() {
-        initComponents();
+
     }
 
     /**
@@ -31,9 +55,7 @@ public class PopulateNewDrug extends javax.swing.JPanel {
         txtPatientName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        lblAddNewDrug = new javax.swing.JLabel();
-        txtlAddNewDrug = new javax.swing.JTextField();
-        btnBack = new javax.swing.JButton();
+
 
         lblNewDrug.setText("New Drug");
 
@@ -53,9 +75,7 @@ public class PopulateNewDrug extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        lblAddNewDrug.setText("Add New Drug");
 
-        btnBack.setText("Back");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -74,10 +94,7 @@ public class PopulateNewDrug extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(118, 118, 118)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addComponent(lblAddNewDrug)
-                        .addGap(59, 59, 59)
+
                         .addComponent(txtlAddNewDrug, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(325, 325, 325)
@@ -96,9 +113,7 @@ public class PopulateNewDrug extends javax.swing.JPanel {
                 .addGap(70, 70, 70)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAddNewDrug)
-                    .addComponent(txtlAddNewDrug, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+
                 .addGap(37, 37, 37)
                 .addComponent(btnBack)
                 .addContainerGap(147, Short.MAX_VALUE))
@@ -106,11 +121,6 @@ public class PopulateNewDrug extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lblAddNewDrug;
     private javax.swing.JLabel lblNewDrug;
     private javax.swing.JLabel lblPatientName;
     private javax.swing.JTextField txtPatientName;

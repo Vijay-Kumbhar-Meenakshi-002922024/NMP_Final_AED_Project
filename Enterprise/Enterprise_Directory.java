@@ -27,29 +27,7 @@ public class Enterprise_Directory {
    
      
      public Enterprise_class createAndAddEnterprise(String name,Enterprise_class.EnterpriseType type){
-        Enterprise_class enterprise=null;
-      
-      if(type==Enterprise_class.EnterpriseType.Hospital){
-            enterprise=new Hospital_Enterprise_class(name);
-            enterpriseList.add(enterprise);
-     
-      }
-         else if (type==Enterprise_class.EnterpriseType.Pharmacy){
-            enterprise= new Pharmacy_Enterprise_class(name);
-            enterpriseList.add(enterprise);
-        }
-        
-        else if (type==Enterprise_class.EnterpriseType.Drug){
-            enterprise=new Drug_Enterprise_class(name);
-            enterpriseList.add(enterprise);
-        }
-        else if (type==Enterprise_class.EnterpriseType.Chemical){
-                
-            enterprise=new Chemical_Enterprise_class(name);
-            enterpriseList.add(enterprise);
-           
-        }
-        return enterprise;
+
      
      }
 }
