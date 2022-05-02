@@ -6,17 +6,17 @@ package UI_Drug_Supplier;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 
 
-import Drug.Drug_List_Class;
-import Drug.Drug_class;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
+import Business.Drug.DrugList;
+import Business.Drug.Drug;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -32,21 +32,19 @@ public class AddDrugPanel extends javax.swing.JPanel {
      * Creates new form AddDrugPanel
      */
     
-    private Drug_List_Class drugList;
+  private DrugList drugList;
     private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization;
-    private Enterprise_class enterprise;
-    private Network_class network;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization;
+    private Enterprise enterprise;
+    private Network network;
     private static Logger log = Logger.getLogger(AddDrugPanel.class);
     private static final String CLASS_NAME = AddDrugPanel.class.getName();
     
     
     public AddDrugPanel(
-        JPanel userProcessContainer, EcoCommunity business, User_account_class userAccount, 
-                drug_org_class drugOrganization, Enterprise_class enterprise, Network_class network) 
-    {
+        JPanel userProcessContainer,  EcoSystem business, UserAccount userAccount, DrugOrganization drugOrganization, Enterprise enterprise, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -54,6 +52,7 @@ public class AddDrugPanel extends javax.swing.JPanel {
         this.enterprise = enterprise;
         this.network = network;
         this.drugOrganization = drugOrganization;
+        
         generateTable();
         
     }
@@ -61,13 +60,13 @@ public class AddDrugPanel extends javax.swing.JPanel {
      public void generateTable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
-        model.setRowCount(0);
+      model.setRowCount(0);
 
-        for (Drug_class drug : business.getDrug_List().getDrug_List()) {
+        for (Drug d : business.getDrugList().getDrugList()) {
 
             Object[] row = new Object[2];
-            row[0] = drug. getDrug_Id();
-            row[1] = drug;
+            row[0] = d.getDrugId();
+            row[1] = d;
             model.addRow(row);
 
         }
@@ -208,9 +207,9 @@ public class AddDrugPanel extends javax.swing.JPanel {
             return;
         }
         ArrayList<String> drugcheck= new ArrayList<>();
-        for(Drug_class drug:business.getDrug_List().getDrug_List())
+        for(Drug d:business.getDrugList().getDrugList())
         {
-            drugcheck.add(drug.getDrug_Name().toLowerCase());
+            drugcheck.add(d.getDrugName().toLowerCase());
         }
         if(drugcheck.contains(drug_Name.toLowerCase()))
         {
@@ -218,7 +217,7 @@ public class AddDrugPanel extends javax.swing.JPanel {
             return;
         }
 
-        business.getDrug_List().add_Drug_List().setDrug_Name(drug_Name);
+        business.getDrugList().addDrugList().setDrugName(drug_Name);
         
         generateTable();
         log.debug(userAccount+" "+"added new drug"+" "+drug_Name);
@@ -235,9 +234,9 @@ public class AddDrugPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "please select a row ");
             return;
         }
-        Drug_class drug = (Drug_class) jTable1.getValueAt(selectedRow, 1);
+         Drug c = (Drug) jTable1.getValueAt(selectedRow, 1);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add("AddChemicalsJPanel", new AddChemicalsPanel(userProcessContainer, business, userAccount, drugOrganization, enterprise, network, drug));
+         userProcessContainer.add("AddChemicalsJPanel", new AddChemicalsPanel(userProcessContainer, business, userAccount, drugOrganization, enterprise, network, c));
         log.debug(userAccount+" "+"entering add chemicals page");
         layout.next(userProcessContainer);
         

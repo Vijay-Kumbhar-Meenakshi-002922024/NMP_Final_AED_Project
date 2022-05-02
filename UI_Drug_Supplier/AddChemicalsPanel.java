@@ -3,15 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
 */
 package UI_Drug_Supplier;
-import Chemical.ChemicalClass;
-import Drug.Drug_class;
-import Drug.Drug_List_Class;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Genetics.Genetic_class;
-import Network.Network_class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
+import Business.Chemical.Chemical;
+import Business.Drug.Drug;
+import Business.Drug.DrugList;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Gene.Gene;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -21,40 +21,37 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class AddChemicalsPanel extends javax.swing.JPanel {
 
     
     
-      private Drug_class drug;
-    private Drug_List_Class drugList;
+     private Drug drug;
+    private DrugList drugList;
      private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization ;
-    private Enterprise_class enterprise;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization ;
+    private Enterprise enterprise;
     private Object e;
     private static Logger log = Logger.getLogger(AddChemicalsPanel.class);
     private static final String CLASS_NAME = AddChemicalsPanel.class.getName();
     
-    private Network_class network;
+    private Network network;
     /**
      * Creates new form AddChemicalsPanel
      */
     public AddChemicalsPanel(
-    JPanel userProcessContainer,EcoCommunity business,User_account_class userAccount,
-            drug_org_class organization,Enterprise_class enterprise,Network_class network,Drug_class drug) {
-    
-          initComponents();
-          
+    JPanel userProcessContainer,EcoSystem business,UserAccount userAccount,DrugOrganization organization,Enterprise enterprise,Network network,Drug drug) {
+        initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.business = business;
         this.enterprise = enterprise;
         this.network = network;
         this.drug = drug;
-        this.drugOrganization = (drug_org_class)organization;
+        this.drugOrganization = (DrugOrganization)organization;
         generateTable();
           }
     
@@ -64,14 +61,14 @@ public class AddChemicalsPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         Object[] row = new Object[2];
         int i = 0;
-            for(ChemicalClass d : drug.getChemical_List().getChemicalList()){
-                 
-                 row[0] = d.getChemical_Name();
+           for(Chemical c : drug.getChemicalList().getChemList()){
+                    row[0] = c.getChemicalName();
                  
                     
-                    Genetic_class gene =  drug.getGenetics_History().getGenetics_History().get(i);
+                       Gene g=  drug.getGeneHistory().getGeneHistory().get(i);
                       
-                      row[1] = gene.getGene_Name();
+                        
+                      row[1] = g.getGeneName();
                       model.addRow(row);
                      i++;
                  }
@@ -205,15 +202,15 @@ public class AddChemicalsPanel extends javax.swing.JPanel {
              return;
          }
          ArrayList<String> chemicalCheck = new ArrayList<>();
-         for(ChemicalClass chem : drug.getChemical_List().getChemicalList())
+                for(Chemical c : drug.getChemicalList().getChemList())
          {
-             chemicalCheck.add(chem.getChemical_Name().toLowerCase());
+             chemicalCheck.add(c.getChemicalName().toLowerCase());
              
          }
          ArrayList<String>genecheck= new ArrayList<>();
-         for(Genetic_class gene:drug.getGenetics_History().getGenetics_History())
+        for(Gene g:drug.getGeneHistory().getGeneHistory())
          {
-             genecheck.add(gene.getGene_Name().toLowerCase());
+               genecheck.add(g.getGeneName().toLowerCase());
          }
          if(chemicalCheck.contains(chemicalName.toLowerCase()))
          {
@@ -226,8 +223,8 @@ public class AddChemicalsPanel extends javax.swing.JPanel {
           JOptionPane.showMessageDialog(null,"Gene already exists in the drug ");
              return;   
          }
-        drug.getChemical_List().Add_Chemical_List_Data().setChemical_Name(chemicalName);
-        drug.getGenetics_History().addGeneticsList().setGene_Name(geneName);
+       drug.getChemicalList().addChemicalList().setChemicalName(chemicalName);
+        drug.getGeneHistory().addGeneList().setGeneName(geneName);
        
         generateTable();
         log.debug(userAccount+" "+"added chemicals and genes to drug"+" "+drug);
@@ -244,7 +241,7 @@ public class AddChemicalsPanel extends javax.swing.JPanel {
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
         AddDrugPanel dwjp = (AddDrugPanel) component;
-
+        dwjp.generateTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
         

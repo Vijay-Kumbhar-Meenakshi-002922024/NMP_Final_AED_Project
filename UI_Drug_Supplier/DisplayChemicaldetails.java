@@ -4,22 +4,22 @@
  */
 package UI_Drug_Supplier;
 
-import Chemical_Repository.Chemical_Mixture_Class;
-import Enterprise.Enterprise_class;
-import Medical_Repository.Medical_Repository_Class;
-import Medical_Repository.Medical_RepositoryList_Class;
-import Organization.drug_org_class;
-import User_account.User_account_class;
+import Business.ChemicalInventory.ChemicalCompound;
+import Business.Enterprise.Enterprise;
+import Business.MedicalInventory.MedicalInventory;
+import Business.MedicalInventory.MedicalInventoryList;
+import Business.Organization.DrugOrganization;
+import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-
+import UI.PHARMACYROLE.PharmacyWorkAreaJPanel;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class DisplayChemicaldetails extends javax.swing.JPanel {
 
@@ -29,27 +29,26 @@ public class DisplayChemicaldetails extends javax.swing.JPanel {
     
     
     JPanel userProcessContainer;
-    private User_account_class userAccount;
-    private Enterprise_class enterprise;
-    private Medical_Repository_Class mil;
-    private drug_org_class drugOrg;
-    private Chemical_Mixture_Class mi;
+    
+    private UserAccount userAccount;
+    private Enterprise enterprise;
+    private MedicalInventoryList mil;
+    private DrugOrganization drugOrg;
+    private ChemicalCompound mi;
     private static Logger log = Logger.getLogger( DisplayChemicaldetails.class);
     private static final String CLASS_NAME = DisplayChemicaldetails.class.getName();
-    public DisplayChemicaldetails(JPanel userProcessContainer, User_account_class userAccount,
-            Enterprise_class enterprise,Chemical_Mixture_Class mi) {
-      
+    public DisplayChemicaldetails(JPanel userProcessContainer,UserAccount userAccount, Enterprise enterprise,ChemicalCompound mi) {
         initComponents();
-        
         this.userProcessContainer=userProcessContainer;
         this.userAccount=userAccount;
         this.enterprise=enterprise;
         this.drugOrg= drugOrg;
         this.mi=mi;
+       
         
-         txtSerialNumber.setText(String.valueOf(mi.getSerial_Number()));
-        txtAvailibity.setText(String.valueOf(mi.getAvailable_Quantity()));
-        txtChemicalName.setText(mi.getChemical_Name());
+         txtSerialNumber.setText(String.valueOf(mi.getSerialNumber()));
+        txtAvailibity.setText(String.valueOf(mi.getAvailQuantity()));
+        txtChemicalName.setText(mi.getChemicalName());
         btnSave.setEnabled(false);
         
     }
@@ -184,7 +183,7 @@ public class DisplayChemicaldetails extends javax.swing.JPanel {
         userProcessContainer.remove(this);
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
-
+        DisplayChemicalRequestPanel me = (DisplayChemicalRequestPanel) component;
         me.reorderTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
@@ -199,11 +198,11 @@ public class DisplayChemicaldetails extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "chemical name is empty");
             return;
         }
-        mi.setChemical_Name(txtChemicalName.getText());
+        mi.setChemicalName(txtChemicalName.getText());
         
         try{
         int availableQuantity= Integer.parseInt(txtAvailibity.getText());
-        mi.setAvailable_Quantity(availableQuantity);
+        mi.setAvailQuantity(availableQuantity);
         }
         catch(NumberFormatException e)
         {
@@ -212,7 +211,7 @@ public class DisplayChemicaldetails extends javax.swing.JPanel {
         }
         try{
         int serialNumber= Integer.parseInt(txtSerialNumber.getText());
-        mi.setSerial_Number(serialNumber);
+        mi.setSerialNumber(serialNumber);
         }
          catch(NumberFormatException e)
         {

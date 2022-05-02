@@ -3,16 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI_Drug_Supplier;
-import Chemical.ChemicalClass;
-import Business.EcoCommunity;
-import Enterprise.Enterprise_class;
-import Network.Network_class;
-import Organization.drug_org_class;
-import static Organization.org_class.Type.Drug;
-import User_account.User_account_class;
+import Business.Chemical.Chemical;
+import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DrugOrganization;
+import static Business.Organization.Organization.Type.Drug;
+import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
-import Drug.Drug_class;
-import Genetics.Genetic_class;
+import Business.Drug.Drug;
+import Business.Gene.Gene;
 import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author dpsmv
+ * @author korapava
  */
 public class AvailableDrugResults extends javax.swing.JPanel {
 
@@ -29,26 +29,25 @@ public class AvailableDrugResults extends javax.swing.JPanel {
      */
     
     private JPanel userProcessContainer;
-    private EcoCommunity business;
-    private User_account_class userAccount;
-    private drug_org_class drugOrganization ;
-    private Enterprise_class enterprise;
-    private Network_class network;
-    private Drug_class drug;
+    private EcoSystem business;
+    private UserAccount userAccount;
+    private DrugOrganization drugOrganization ;
+    private Enterprise enterprise;
+    private Network network;
+    private Drug drug;
     private static Logger log = Logger.getLogger(AvailableDrugResults.class);
     private static final String CLASS_NAME = AvailableDrugResults.class.getName();
     public AvailableDrugResults(
-    JPanel userProcessContainer,User_account_class userAccount,Enterprise_class enterprise,
-            drug_org_class drugOrganization,Network_class network,Drug_class drug) {
-           initComponents();
-        this.userProcessContainer = userProcessContainer;
+    JPanel userProcessContainer,UserAccount userAccount,Enterprise enterprise, DrugOrganization drugOrganization,Network network,Drug drug) {
+        initComponents();
+         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.drugOrganization = drugOrganization;
         this.enterprise = enterprise;
         this.network = network;
         this.drug=drug;
         generateTable();
-        txtDrugName.setText(drug.getDrug_Name());
+        txtDrugName.setText(drug.getDrugName());
            
     }
 
@@ -58,14 +57,14 @@ public class AvailableDrugResults extends javax.swing.JPanel {
         model.setRowCount(0);
         Object[] row = new Object[2];
         int i = 0;
-            for(ChemicalClass chem : drug.getChemical_List().getChemicalList()){
+           for(Chemical c : drug.getChemicalList().getChemList()){
                  
-                 row[0] = chem.getChemical_Name();
+                 row[0] = c.getChemicalName();
                  
                     
-                    Genetic_class gene =  drug.getGenetics_History().getGenetics_History().get(i);
+                    Gene g=  drug.getGeneHistory().getGeneHistory().get(i);
                       
-                      row[1] = gene.getGene_Name();
+                      row[1] = g.getGeneName();
                       model.addRow(row);
                      i++;
                  }     
@@ -159,7 +158,7 @@ public class AvailableDrugResults extends javax.swing.JPanel {
          userProcessContainer.remove(this);
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
-
+        LabResultsPanel lrjp = (LabResultsPanel) component;
         lrjp.populateTable();
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
